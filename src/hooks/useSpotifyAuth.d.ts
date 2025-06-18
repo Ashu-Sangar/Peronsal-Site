@@ -1,0 +1,1 @@
+export const useSpotifyAuth: () => { token: string | null }; 
