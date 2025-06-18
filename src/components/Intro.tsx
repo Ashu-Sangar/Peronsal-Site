@@ -26,7 +26,7 @@ const Intro = () => {
 
   return (
     <div className="text-center md:text-left max-w-3xl mx-auto mt-6 mb-2 px-2">
-      <h1 className="text-2xl md:text-3xl font-extrabold mb-2 text-white animate-fade-in" style={{ minHeight: 40 }}>
+      <h1 className="text-2xl md:text-3xl font-extrabold mb-2 text-foreground animate-fade-in" style={{ minHeight: 40 }}>
         {typed}
         <span
           className={`inline-block w-2 ml-1 align-baseline transition-opacity duration-200 ${
