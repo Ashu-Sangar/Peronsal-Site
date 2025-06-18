@@ -126,7 +126,7 @@ export function useSpotify() {
     setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, recent: true }, error: { ...prev.error, recent: null } }));
 
     try {
-      const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played?limit=5', {
+      const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played?limit=10', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -175,7 +175,7 @@ export function useSpotify() {
 
     try {
       const response = await axios.get(
-        'https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=short_term',
+        'https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=short_term',
         {
           headers: {
             'Authorization': `Bearer ${token}`
