@@ -151,7 +151,7 @@ const SpotifyPlaying = () => {
       setIsLoading(prev => ({ ...prev, top: true }));
       setError(prev => ({ ...prev, top: null }));
       
-      const response = await fetch('https://api.spotify.com/v1/me/top/tracks?limit=4&time_range=short_term', {
+      const response = await fetch('https://api.spotify.com/v1/me/top/tracks?limit=5&time_range=short_term', {
         headers: { Authorization: `Bearer ${token}` }
       });
       
