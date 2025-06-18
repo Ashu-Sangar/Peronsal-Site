@@ -15,8 +15,8 @@ type TimelineProps = {
 
 const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
   <div className={`w-full md:w-1/3${dragging ? ' pointer-events-none' : ''}`}>
-    <h3 className="font-semibold text-lg mb-6 text-center">Timeline</h3>
-    <ol className="border-l border-white/15">
+    <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Timeline</h3>
+    <ol className="border-l border-border">
       {items.map((item, index) => (
         <li
           key={index}
@@ -26,11 +26,11 @@ const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
             className={`absolute -left-[0.4rem] top-1 w-3 h-3 rounded-full ${item.color}`}
           ></span>
           <div className="flex justify-between items-baseline mb-1">
-            <h4 className="font-bold">{item.company}</h4>
-            <span className="text-xs text-white/50">{item.date}</span>
+            <h4 className="font-bold text-foreground">{item.company}</h4>
+            <span className="text-xs text-muted-foreground">{item.date}</span>
           </div>
-          <p className="text-sm text-white/80">{item.role}</p>
-          <ul className="list-disc pl-5 mt-2 text-sm text-white/60">
+          <p className="text-sm text-foreground/80">{item.role}</p>
+          <ul className="list-disc pl-5 mt-2 text-sm text-muted-foreground">
             <li>{item.details}</li>
           </ul>
         </li>

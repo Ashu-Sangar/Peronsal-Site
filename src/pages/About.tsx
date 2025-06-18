@@ -31,7 +31,7 @@ const timelineData = [
         role: 'Software Engineer',
         details: 'Led the development of real-time AI integration enabling dynamic manipulation of Blender models.',
         date: '2024 - Now',
-        color: 'bg-blue-400'
+        color: 'bg-red-400'
     },
     {
         company: 'Outlier Ai',
@@ -54,7 +54,7 @@ const projectsData = [
     name: "FEAGI-Blender Integration",
     description: "AI-driven control and manipulation of 3D models, enhancing dynamic interactions and automation.",
     tags: [
-      { name: "Python", color: "bg-blue-600 text-white" },
+      { name: "Python", color: "bg-gray-600 text-white" },
       { name: "Docker", color: "bg-cyan-500 text-white" },
       { name: "Blender API", color: "bg-gray-200 text-black" },
       { name: "FEAGI", color: "bg-green-600 text-white" },
@@ -90,7 +90,7 @@ const projectsData = [
 export default function About() {
   const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
   return (
-    <div className="min-h-screen w-full bg-black text-white flex flex-col">
+    <div className="min-h-screen w-full bg-background text-foreground flex flex-col transition-colors duration-300">
       <Navbar />
       <main className="flex-1 flex flex-col items-center px-2">
         <section className="w-full max-w-5xl mx-auto text-center mt-16 mb-4">

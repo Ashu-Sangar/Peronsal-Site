@@ -1,57 +1,77 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSpotify } from '../hooks/useSpotify';
-import { Spotify } from 'react-spotify-embed';
-import FadeIn from '../utils/FadeIn';
+import { useSpotifyAuth } from '@/hooks/useSpotifyAuth';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
-import { RefreshCw, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
+import { useTheme } from '@/context/ThemeContext';
+import { Spotify } from 'react-spotify-embed';
+import TrackItem from './TrackItem';
+import FadeInSection from './FadeInSection';
 
 type TrackListType = 'recent' | 'top';
 
 const SpotifyPlaying = () => {
-  const { 
-    currentTrack, 
-    recentTracks, 
-    topTracks, 
-    isLoading, 
-    error,
-    refetch 
-  } = useSpotify();
-  
+  const { theme } = useTheme();
+  const { token } = useSpotifyAuth();
   const [activeList, setActiveList] = useState<TrackListType>('recent');
-  const [displayTrack, setDisplayTrack] = useState<any>(null);
-  const [tracksList, setTracksList] = useState<any[]>([]);
-  const { currentTheme } = useTheme();
+  const [currentTrack, setCurrentTrack] = useState<any>(null);
+  const [recentTracks, setRecentTracks] = useState<any[]>([]);
+  const [topTracks, setTopTracks] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState({ current: true, recent: true, top: true });
+  const [error, setError] = useState<{ current: string | null, recent: string | null, top: string | null }>({ 
+    current: null, 
+    recent: null, 
+    top: null 
+  });
   const tracksRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Always show current track if it exists
-    if (currentTrack) {
-      setDisplayTrack(currentTrack);
-      if (activeList === 'top') {
-        // Show top 4 tracks when viewing top tracks
-        setTracksList(topTracks.slice(0, 4));
-      } else {
-        // Show recent tracks (excluding current track if it's in the list)
-        setTracksList(recentTracks.slice(0, 4));
+  const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay }}
+    >
+      {children}
+    </motion.div>
+  );
+
+  const fetchCurrentTrack = async () => {
+    if (!token) return;
+    
+    try {
+      setIsLoading(prev => ({ ...prev, current: true }));
+      setError(prev => ({ ...prev, current: null }));
+      
+      const response = await fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.status === 204) {
+        setCurrentTrack(null);
+        return;
       }
-    } else {
-      // No current track playing
-      if (activeList === 'top') {
-        // Show #1 top track as main and rest in list
-        setDisplayTrack(topTracks[0]);
-        setTracksList(topTracks.slice(1));
-      } else {
-        // Show most recent track as main and rest in list
-        setDisplayTrack(recentTracks[0]);
-        setTracksList(recentTracks.slice(1, 5));
-      }
+      
+      if (!response.ok) throw new Error('Failed to fetch current track');
+      
+      const data = await response.json();
+      setCurrentTrack(data);
+    } catch (err) {
+      console.error('Error fetching current track:', err);
+      setError(prev => ({ ...prev, current: 'Failed to fetch current track' }));
+    } finally {
+      setIsLoading(prev => ({ ...prev, current: false }));
     }
-  }, [activeList, currentTrack, recentTracks, topTracks]);
+  };
 
   const handleTabClick = (type: TrackListType) => {
     setActiveList(type);
     
+    // Scroll to tracks section on mobile after tab change
+    setTimeout(() => {
+      scrollToTracks();
+    }, 100);
+  };
+
+  const scrollToTracks = () => {
     // Check if tracks section is not fully visible
     if (tracksRef.current) {
       const rect = tracksRef.current.getBoundingClientRect();
@@ -92,14 +112,89 @@ const SpotifyPlaying = () => {
 
   const renderLoadingState = () => (
     <div className="animate-pulse space-y-4">
-      <div className="h-[352px] bg-gray-800 rounded-lg"></div>
+      <div className="h-[352px] bg-muted rounded-lg"></div>
       <div className="space-y-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-[80px] bg-gray-800 rounded-lg"></div>
+          <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
         ))}
       </div>
     </div>
   );
+
+  const fetchRecentTracks = async () => {
+    if (!token) return;
+    
+    try {
+      setIsLoading(prev => ({ ...prev, recent: true }));
+      setError(prev => ({ ...prev, recent: null }));
+      
+      const response = await fetch('https://api.spotify.com/v1/me/player/recently-played?limit=5', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch recent tracks');
+      
+      const data = await response.json();
+      setRecentTracks(data.items || []);
+    } catch (err) {
+      console.error('Error fetching recent tracks:', err);
+      setError(prev => ({ ...prev, recent: 'Failed to fetch recent tracks' }));
+    } finally {
+      setIsLoading(prev => ({ ...prev, recent: false }));
+    }
+  };
+
+  const fetchTopTracks = async () => {
+    if (!token) return;
+    
+    try {
+      setIsLoading(prev => ({ ...prev, top: true }));
+      setError(prev => ({ ...prev, top: null }));
+      
+      const response = await fetch('https://api.spotify.com/v1/me/top/tracks?limit=4&time_range=short_term', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch top tracks');
+      
+      const data = await response.json();
+      setTopTracks(data.items || []);
+    } catch (err) {
+      console.error('Error fetching top tracks:', err);
+      setError(prev => ({ ...prev, top: 'Failed to fetch top tracks' }));
+    } finally {
+      setIsLoading(prev => ({ ...prev, top: false }));
+    }
+  };
+
+  useEffect(() => {
+    if (token) {
+      fetchCurrentTrack();
+      fetchRecentTracks();
+      fetchTopTracks();
+    }
+  }, [token]);
+
+  const refetch = {
+    current: fetchCurrentTrack,
+    recent: fetchRecentTracks,
+    top: fetchTopTracks
+  };
+
+  // Always show currently playing track if available, otherwise show first recent track as fallback
+  const displayTrack = currentTrack?.item || (recentTracks.length > 0 ? recentTracks[0]?.track : null);
+  
+  // Filter out the currently displayed track from the lists to avoid duplicates
+  const filteredRecentTracks = recentTracks.filter(track => {
+    const trackToCompare = track.track || track;
+    return trackToCompare?.id !== displayTrack?.id;
+  });
+  
+  const filteredTopTracks = topTracks.filter(track => {
+    return track?.id !== displayTrack?.id;
+  });
+  
+  const tracksList = activeList === 'top' ? filteredTopTracks : filteredRecentTracks;
 
   if (isLoading.current && isLoading.recent && isLoading.top) {
     return renderLoadingState();
@@ -114,7 +209,7 @@ const SpotifyPlaying = () => {
             {'Currently Playing'}
           </h2>
           {/* Tab buttons */}
-          <div className="relative flex bg-gray-800 rounded-full p-1 gap-1 shadow-inner min-w-[260px]">
+          <div className="relative flex bg-muted rounded-full p-1 gap-1 shadow-inner min-w-[260px]">
             <button
               onClick={() => handleTabClick('recent')}
               className={`relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden`}
@@ -123,11 +218,11 @@ const SpotifyPlaying = () => {
               {activeList === 'recent' && (
                 <motion.div
                   layoutId="spotify-toggle-pill"
-                  className="absolute inset-0 bg-gray-900 shadow rounded-full z-0"
+                  className="absolute inset-0 bg-background shadow rounded-full z-0"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 ${activeList === 'recent' ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>Recently Played</span>
+              <span className={`relative z-10 ${activeList === 'recent' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}>Recently Played</span>
             </button>
             <button
               onClick={() => handleTabClick('top')}
@@ -137,11 +232,11 @@ const SpotifyPlaying = () => {
               {activeList === 'top' && (
                 <motion.div
                   layoutId="spotify-toggle-pill"
-                  className="absolute inset-0 bg-gray-900 shadow rounded-full z-0"
+                  className="absolute inset-0 bg-background shadow rounded-full z-0"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 ${activeList === 'top' ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>Top Tracks</span>
+              <span className={`relative z-10 ${activeList === 'top' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}>Top Tracks</span>
             </button>
           </div>
         </div>
@@ -154,13 +249,13 @@ const SpotifyPlaying = () => {
           {/* Mobile Title */}
           <div className="mb-4 sm:hidden">
             <h2 className="text-lg font-semibold">
-              {currentTrack ? 'Now Playing' : (activeList === 'top' ? '#1 Track This Month' : 'Recently Played')}
+              {currentTrack?.item ? 'Now Playing' : 'Recently Played'}
             </h2>
             {renderError(error.current || (activeList === 'top' ? error.top : error.recent))}
           </div>
           <AnimatePresence mode="wait">
             <motion.div
-              key={displayTrack?.spotifyUrl || displayTrack?.id || activeList}
+              key={displayTrack?.external_urls?.spotify || displayTrack?.id || activeList}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -170,11 +265,11 @@ const SpotifyPlaying = () => {
                 <>
                   <Spotify 
                     wide
-                    link={displayTrack.spotifyUrl}
+                    link={displayTrack.external_urls?.spotify || displayTrack.spotifyUrl}
                     className="w-full sm:hidden"
                   />
                   <Spotify 
-                    link={displayTrack.spotifyUrl}
+                    link={displayTrack.external_urls?.spotify || displayTrack.spotifyUrl}
                     className="hidden sm:block w-full"
                   />
                   {/* Mobile Buttons - Only shown when track is playing */}
@@ -184,13 +279,9 @@ const SpotifyPlaying = () => {
                         onClick={() => handleTabClick('recent')}
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           activeList === 'recent'
-                            ? 'text-gray-900 dark:text-white font-medium'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                            ? 'bg-muted text-foreground font-medium'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
-                        style={{ 
-                          backgroundColor: activeList === 'recent' ? currentTheme.nav.bubble : 'transparent',
-                          transition: 'background-color 0.2s ease-in-out'
-                        }}
                       >
                         Recently Played
                       </button>
@@ -198,13 +289,9 @@ const SpotifyPlaying = () => {
                         onClick={() => handleTabClick('top')}
                         className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                           activeList === 'top'
-                            ? 'text-gray-900 dark:text-white font-medium'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                            ? 'bg-muted text-foreground font-medium'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
-                        style={{ 
-                          backgroundColor: activeList === 'top' ? currentTheme.nav.bubble : 'transparent',
-                          transition: 'background-color 0.2s ease-in-out'
-                        }}
                       >
                         Top Tracks
                       </button>
@@ -221,7 +308,7 @@ const SpotifyPlaying = () => {
           {(isLoading.recent || isLoading.top) ? (
             <div className="animate-pulse space-y-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-[80px] bg-gray-800 rounded-lg"></div>
+                <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
               ))}
             </div>
           ) : (
@@ -237,7 +324,7 @@ const SpotifyPlaying = () => {
                   <FadeIn key={index} delay={1 + index * 0.3}>
                     <Spotify 
                       wide 
-                      link={track.spotifyUrl}
+                      link={(activeList === 'recent' ? track.track?.external_urls?.spotify : track.external_urls?.spotify) || track.spotifyUrl}
                       className="w-full"
                     />
                   </FadeIn>

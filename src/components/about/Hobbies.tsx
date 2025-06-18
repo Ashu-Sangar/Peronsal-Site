@@ -30,15 +30,15 @@ const hobbies = [
 type HobbiesProps = { dragging?: boolean };
 const Hobbies: React.FC<HobbiesProps> = ({ dragging }) => (
   <div className={`w-full md:w-1/3 flex flex-col gap-5${dragging ? ' pointer-events-none' : ''}`}>
-    <h3 className="font-semibold text-lg mb-6 text-center">Hobbies</h3>
+    <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Hobbies</h3>
     <div className="flex flex-col gap-4">
       {hobbies.map((hobby, idx) => (
         <div
           key={hobby.title}
-          className="transition-transform duration-200 hover:scale-105 bg-white/10 rounded-xl p-4"
+          className="transition-transform duration-200 hover:scale-105 bg-card border border-border rounded-xl p-4"
         >
-          <span className="font-bold">{hobby.title}</span>
-          <div className="text-md text-white/80">{hobby.description}</div>
+          <span className="font-bold text-foreground">{hobby.title}</span>
+          <div className="text-md text-foreground/80">{hobby.description}</div>
           <div className={`${hobby.statColor} text-sm`}>{hobby.stat}</div>
         </div>
       ))}
