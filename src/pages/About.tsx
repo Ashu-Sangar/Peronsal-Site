@@ -58,6 +58,11 @@ const projectsData = [
       { name: "Docker", color: "bg-cyan-500 text-white" },
       { name: "Blender API", color: "bg-gray-200 text-black" },
       { name: "FEAGI", color: "bg-green-600 text-white" },
+      { name: "websocket", color: "bg-pink-600 text-white" }, 
+      { name: "JSON", color: "bg-orange-600 text-white" },
+      { name: "UDP", color: "bg-blue-500 text-white" },
+      { name: "ZMQ", color: "bg-red-500 text-white" },
+      { name: "LZ4", color: "bg-purple-500 text-white" },
     ],
     github: "https://github.com/feagi/blender-connector"
   },
@@ -81,7 +86,7 @@ const projectsData = [
       { name: "Next.js", color: "bg-cyan-500 text-white" },
       { name: "React", color: "bg-green-400 text-white" },
       { name: "Spotify Web API", color: "bg-yellow-400 text-black" },
-      { name: "Vercel", color: "bg-green-600 text-white" },
+      { name: "Vercel", color: "bg-red-600 text-white" },
     ],
     github: "https://github.com/Ashu-Sangar/Spotify-web-app"
   },
