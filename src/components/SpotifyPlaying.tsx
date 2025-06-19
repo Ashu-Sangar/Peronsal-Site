@@ -30,21 +30,32 @@ const SpotifyPlaying = () => {
     const mainDisplayTrack = currentTrack || (recentTracks.length > 0 ? recentTracks[0] : null);
     setDisplayTrack(mainDisplayTrack);
 
+    // Helper function to remove duplicates and filter out main display track
+    const getUniqueFilteredTracks = (tracks: any[], mainTrack: any) => {
+      if (!tracks || tracks.length === 0) return [];
+      
+      // Create a Map to track unique tracks by ID
+      const uniqueTracksMap = new Map();
+      
+      tracks.forEach(track => {
+        if (track?.id && track.id !== mainTrack?.id) {
+          // Only keep the first occurrence of each track
+          if (!uniqueTracksMap.has(track.id)) {
+            uniqueTracksMap.set(track.id, track);
+          }
+        }
+      });
+      
+      return Array.from(uniqueTracksMap.values()).slice(0, 4);
+    };
+
     // Only the side tracks list changes based on active tab
     if (activeList === 'top') {
-      // Show top tracks (excluding the main display track if it's in the list)
-      // Filter first, then take 4 to ensure we get 4 unique tracks
-      const filteredTopTracks = topTracks.filter(track => 
-        track?.id !== mainDisplayTrack?.id
-      );
-      setTracksList(filteredTopTracks.slice(0, 4));
+      const uniqueTopTracks = getUniqueFilteredTracks(topTracks, mainDisplayTrack);
+      setTracksList(uniqueTopTracks);
     } else {
-      // Show recent tracks (excluding the main display track if it's in the list)
-      // Filter first, then take 4 to ensure we get 4 unique tracks
-      const filteredRecentTracks = recentTracks.filter(track => 
-        track?.id !== mainDisplayTrack?.id
-      );
-      setTracksList(filteredRecentTracks.slice(0, 4));
+      const uniqueRecentTracks = getUniqueFilteredTracks(recentTracks, mainDisplayTrack);
+      setTracksList(uniqueRecentTracks);
     }
   }, [activeList, currentTrack, recentTracks, topTracks]);
 
