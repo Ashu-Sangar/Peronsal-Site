@@ -4,7 +4,7 @@ import { Spotify } from 'react-spotify-embed';
 import FadeIn from '../utils/FadeIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import { RefreshCw, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 type TrackListType = 'recent' | 'top';
 
@@ -80,14 +80,7 @@ const SpotifyPlaying = () => {
     }
   };
 
-  const handleRefresh = () => {
-    if (activeList === 'top') {
-      refetch.top();
-    } else {
-      refetch.recent();
-    }
-    refetch.current();
-  };
+
 
   const renderError = (errorMessage: string | null) => {
     if (!errorMessage) return null;
