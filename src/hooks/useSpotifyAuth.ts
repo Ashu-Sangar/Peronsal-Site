@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
+// Only the client ID is needed on the client side now
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-const CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-const REFRESH_TOKEN = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 
 interface TokenData {
   access_token: string;
@@ -17,18 +15,12 @@ export const useSpotifyAuth = () => {
 
   const getAccessToken = useCallback(async () => {
     try {
-      const basic = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
-      const params = new URLSearchParams();
-      params.append("grant_type", "refresh_token");
-      params.append("refresh_token", REFRESH_TOKEN);
-
-      const response = await fetch(TOKEN_ENDPOINT, {
+      // Use our secure API endpoint instead of making the request directly
+      const response = await fetch('/api/spotify/token', {
         method: 'POST',
         headers: {
-          Authorization: `Basic ${basic}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
         },
-        body: params.toString()
       });
 
       if (!response.ok) {
