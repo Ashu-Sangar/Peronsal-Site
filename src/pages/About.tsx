@@ -43,7 +43,7 @@ const timelineData = [
     {
         company: 'University Of Pittsburgh ',
         role: 'B.S in Computer Science',
-        details: 'got my degree to make my parents proud',
+        details: 'Where I learned that the shortest path isn\'t always the most efficient',
         date: '2021-2025',
         color: 'bg-green-400'
     },
