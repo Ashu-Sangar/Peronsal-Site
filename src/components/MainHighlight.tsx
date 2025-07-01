@@ -2,7 +2,7 @@ const MainHighlight = () => (
   <section className="w-full max-w-3xl mx-auto mt-6 animate-fade-in flex flex-col">
     <div className="relative rounded-lg overflow-hidden bg-card border border-border flex flex-col md:flex-row items-center">
       <img
-        src="/img/img3.jpeg"
+        src="/img/img4.jpeg"
         alt="Current Focus"
         className="h-44 w-full md:w-60 object-cover md:rounded-r-none"
       />
