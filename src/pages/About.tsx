@@ -21,7 +21,7 @@ const photos = [
   {
     src: "/img/img3.jpeg",
     alt: "Photo 3",
-    backText: "Pondering too hard, don't know what to think anymore.",
+    backText: "Mildly radioactive, highly reflective.",
   }
 ];
 
