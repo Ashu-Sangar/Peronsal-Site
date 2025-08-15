@@ -49,7 +49,7 @@ const Footer = () => {
         </a>
         
         {/* Email Icon */}
-        <a href="mailto:ashu.sangar18@gmail.com" className="hover:opacity-80 transition" aria-label="Email">
+        <a href="mailto:ashu.sangar.dev@gmail.com" className="hover:opacity-80 transition" aria-label="Email">
           <img 
             src={theme === 'dark' 
               ? "https://img.icons8.com/?size=100&id=rUgzXdXFnhmg&format=png&color=FFFFFF"
