@@ -78,8 +78,8 @@ export default function Contact() {
             <ContactCard
               icon={<Mail size={22} className="text-foreground" />}
               label="Email"
-              value="ashu.sangar18@gmail.com"
-              href="mailto:ashu.sangar18@gmail.com"
+              value="ashu.sangar.dev@gmail.com"
+              href="mailto:ashu.sangar.dev@gmail.com"
             />
             <ContactCard
               icon={<Instagram size={22} className="text-foreground" />}
