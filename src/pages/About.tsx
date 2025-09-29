@@ -27,17 +27,17 @@ const photos = [
 
 const timelineData = [
     {
-        company: 'Neruaville',
+        company: 'Neuraville',
         role: 'Software Engineer',
-        details: 'Led the development of real-time AI integration enabling dynamic manipulation of Blender models.',
-        date: '2024 - Now',
+        details: 'Developed real-time AI-human interface integrating FEAGI with Blender, achieving 99% performance optimization and 80% reduction in manual setup through automated Python scripts.',
+        date: 'Jan 2025 - May 2025',
         color: 'bg-red-400'
     },
     {
-        company: 'Outlier Ai',
+        company: 'Outlier AI',
         role: 'Prompt Engineer',
-        details: 'Focused on refining and optimizing AI model prompts to improve accuracy, responsiveness, and overall performance in applications.',
-        date: '2024 - 2025',
+        details: 'Developed 50+ AI prompts across multiple domains, improving response accuracy by 25% and model robustness by 30% through comprehensive stress-testing frameworks.',
+        date: 'Apr 2024 - Dec 2024',
         color: 'bg-yellow-300'
     },
     {
@@ -52,13 +52,16 @@ const timelineData = [
 const projectsData = [
   {
     name: "FEAGI-Blender Integration",
-    description: "AI-driven control and manipulation of 3D models, enhancing dynamic interactions and automation.",
+    description: "Real-time AI-human interface translating body movements into 3D simulations with 99% performance optimization and automated character binding system.",
     tags: [
       { name: "Python", color: "bg-gray-600 text-white" },
       { name: "Docker", color: "bg-cyan-500 text-white" },
       { name: "Blender API", color: "bg-gray-200 text-black" },
       { name: "FEAGI", color: "bg-green-600 text-white" },
-      { name: "websocket", color: "bg-pink-600 text-white" }, 
+      { name: "WebSocket", color: "bg-pink-600 text-white" }, 
+      { name: "RESTful APIs", color: "bg-indigo-600 text-white" },
+      { name: "Computer Vision", color: "bg-teal-600 text-white" },
+      { name: "Motion Capture", color: "bg-amber-600 text-white" },
       { name: "JSON", color: "bg-orange-600 text-white" },
       { name: "UDP", color: "bg-blue-500 text-white" },
       { name: "ZMQ", color: "bg-red-500 text-white" },
