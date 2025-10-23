@@ -10,7 +10,7 @@ const MainHighlight = () => (
         <h2 className="text-lg font-bold text-foreground mb-1">Current Focus</h2>
         <p className="text-sm text-muted-foreground mb-2">
         Diving into automation as well as AI to construct intelligent and efficient workflows that power real world results.        </p>
-        <a href="/resume/Ashu_Sangar_Resume.pdf" download className="inline-block mt-auto px-4 py-2 rounded bg-primary/80 text-primary-foreground font-semibold transition hover:bg-primary text-sm">Download CV</a>
+        <a href="/resume/Ashu_Sangar_Resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-block mt-auto px-4 py-2 rounded bg-primary/80 text-primary-foreground font-semibold transition hover:bg-primary text-sm">View CV</a>
       </div>
     </div>
   </section>
