@@ -26,30 +26,44 @@ const photos = [
 ];
 
 const timelineData = [
-    {
-        company: 'Neuraville',
-        role: 'Software Engineer',
-        details: 'Developed real-time AI-human interface integrating FEAGI with Blender, achieving 99% performance optimization and 80% reduction in manual setup through automated Python scripts.',
-        date: 'Jan 2025 - May 2025',
-        color: 'bg-red-400'
-    },
-    {
-        company: 'Outlier AI',
-        role: 'Prompt Engineer',
-        details: 'Developed 50+ AI prompts across multiple domains, improving response accuracy by 25% and model robustness by 30% through comprehensive stress-testing frameworks.',
-        date: 'Apr 2024 - Dec 2024',
-        color: 'bg-yellow-300'
-    },
-    {
-        company: 'University Of Pittsburgh ',
-        role: 'B.S in Computer Science',
-        details: 'Where I learned that the shortest path isn\'t always the most efficient',
-        date: '2021-2025',
-        color: 'bg-green-400'
-    },
+  {
+    company: 'Neuraville',
+    role: 'Software Engineer',
+    details: 'Developed real-time AI-human interface integrating FEAGI with Blender, achieving 99% performance optimization and 80% reduction in manual setup through automated Python scripts.',
+    date: 'Jan 2025 - May 2025',
+    color: 'bg-red-400'
+  },
+  {
+    company: 'Outlier AI',
+    role: 'Prompt Engineer',
+    details: 'Developed 50+ AI prompts across multiple domains, improving response accuracy by 25% and model robustness by 30% through comprehensive stress-testing frameworks.',
+    date: 'Apr 2024 - Dec 2024',
+    color: 'bg-yellow-300'
+  },
+  {
+    company: 'University Of Pittsburgh ',
+    role: 'B.S in Computer Science',
+    details: 'Where I learned that the shortest path isn\'t always the most efficient',
+    date: '2021-2025',
+    color: 'bg-green-400'
+  },
 ];
 
 const projectsData = [
+  {
+    name: "Altus",
+    description: "Full-stack productivity platform that quantifies focus quality. Features real-time session tracking, secure authentication, and rigid server-side data validation.",
+    tags: [
+      { name: "Next.js 14", color: "bg-black text-white" },
+      { name: "FastAPI (Python)", color: "bg-teal-600 text-white" },
+      { name: "Firebase Auth", color: "bg-amber-500 text-black" },
+      { name: "Firestore", color: "bg-orange-600 text-white" },
+      { name: "Pydantic", color: "bg-rose-500 text-white" },
+      { name: "TypeScript", color: "bg-blue-600 text-white" },
+    ],
+    // Update this link once you rename your repo!
+    github: "https://github.com/Ashu-Sangar/atlus-ai"
+  },
   {
     name: "FEAGI-Blender Integration",
     description: "Real-time AI-human interface translating body movements into 3D simulations with 99% performance optimization and automated character binding system.",
@@ -58,7 +72,7 @@ const projectsData = [
       { name: "Docker", color: "bg-cyan-500 text-white" },
       { name: "Blender API", color: "bg-gray-200 text-black" },
       { name: "FEAGI", color: "bg-green-600 text-white" },
-      { name: "WebSocket", color: "bg-pink-600 text-white" }, 
+      { name: "WebSocket", color: "bg-pink-600 text-white" },
       { name: "RESTful APIs", color: "bg-indigo-600 text-white" },
       { name: "Computer Vision", color: "bg-teal-600 text-white" },
       { name: "Motion Capture", color: "bg-amber-600 text-white" },
