@@ -51,6 +51,20 @@ const timelineData = [
 
 const projectsData = [
   {
+    name: "Keepsake",
+    description: "Real-time collaborative digital scrapbook with drag-and-drop canvas, live cursor tracking, AI background removal, and operation-based undo/redo. Features multi-spread pagination, smart snapping, and role-based access control.",
+    tags: [
+      { name: "Next.js 16", color: "bg-black text-white" },
+      { name: "React 19", color: "bg-cyan-500 text-white" },
+      { name: "TypeScript", color: "bg-blue-600 text-white" },
+      { name: "Supabase", color: "bg-green-600 text-white" },
+      { name: "Framer Motion", color: "bg-pink-600 text-white" },
+      { name: "Tailwind CSS 4", color: "bg-teal-600 text-white" },
+      { name: "Upstash Redis", color: "bg-red-500 text-white" },
+    ],
+    liveUrl: "https://keepsake.ashusangar.com"
+  },
+  {
     name: "Altus",
     description: "Full-stack productivity platform that quantifies focus quality. Features real-time session tracking, secure authentication, and rigid server-side data validation.",
     tags: [
@@ -95,17 +109,6 @@ const projectsData = [
       { name: "Scikit-learn ", color: "bg-red-500 text-white" },
     ],
     github: "https://github.com/Ashu-Sangar/NLP-Legal-Precedent"
-  },
-  {
-    name: "Spotify Data Dashboard",
-    description: "display users' top albums and artists through interactive grids and rotating collages. Included export-to-image and social sharing features for platforms like Instagram.",
-    tags: [
-      { name: "Next.js", color: "bg-cyan-500 text-white" },
-      { name: "React", color: "bg-green-400 text-white" },
-      { name: "Spotify Web API", color: "bg-yellow-400 text-black" },
-      { name: "Vercel", color: "bg-red-600 text-white" },
-    ],
-    github: "https://github.com/Ashu-Sangar/Spotify-web-app"
   },
 ];
 
