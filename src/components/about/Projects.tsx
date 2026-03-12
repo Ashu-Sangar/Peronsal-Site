@@ -1,6 +1,6 @@
 import React from "react";
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
-import { Github } from "lucide-react";
+import { Github, ExternalLink } from "lucide-react";
 
 type Tag = {
   name: string;
@@ -12,6 +12,7 @@ type Project = {
   description: string;
   tags: Tag[];
   github?: string;
+  liveUrl?: string;
 };
 
 type ProjectsProps = {
@@ -45,22 +46,22 @@ const Projects: React.FC<ProjectsProps> = ({ projects, dragging }) => (
                 </div>
               </div>
             </HoverCardTrigger>
-            {project.github && (
+            {(project.github || project.liveUrl) && (
               <HoverCardContent
                 side="top"
                 align="center"
                 className="flex flex-col items-center text-center bg-popover/90 backdrop-blur-sm border border-border shadow-lg rounded-lg p-4 min-w-[180px] cursor-pointer"
-                onClick={() => window.open(project.github, '_blank')}
+                onClick={() => window.open(project.liveUrl || project.github, '_blank')}
                 onMouseEnter={e => e.stopPropagation()}
               >
-                <span 
+                <span
                   className="mb-2 font-semibold text-foreground"
                 >
-                  View on GitHub
+                  {project.liveUrl ? 'View Live' : 'View on GitHub'}
                 </span>
                 <div className="flex items-center gap-2 px-3 py-2 rounded bg-muted text-foreground hover:bg-muted/80 transition font-medium">
-                  <Github size={20} />
-                  <span>Repository</span>
+                  {project.liveUrl ? <ExternalLink size={20} /> : <Github size={20} />}
+                  <span>{project.liveUrl ? 'Live Site' : 'Repository'}</span>
                 </div>
               </HoverCardContent>
             )}
