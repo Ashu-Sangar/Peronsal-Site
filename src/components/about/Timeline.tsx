@@ -14,7 +14,7 @@ type TimelineProps = {
 };
 
 const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
-  <div className={`w-full md:w-1/3${dragging ? ' pointer-events-none' : ''}`}>
+  <div className={`w-full md:w-1/2${dragging ? ' pointer-events-none' : ''}`}>
     <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Timeline</h3>
     <ol className="border-l border-border">
       {items.map((item, index) => (

@@ -29,7 +29,7 @@ const interests = [
 
 type HobbiesProps = { dragging?: boolean };
 const Hobbies: React.FC<HobbiesProps> = ({ dragging }) => (
-  <div className={`w-full md:w-1/3 flex flex-col gap-5${dragging ? ' pointer-events-none' : ''}`}>
+  <div className={`w-full md:w-1/2 flex flex-col gap-5${dragging ? ' pointer-events-none' : ''}`}>
     <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Interests & Learning</h3>
     <div className="flex flex-col gap-4">
       {interests.map((interest, idx) => (

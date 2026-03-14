@@ -44,6 +44,18 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
+          to="/projects"
+          className={({ isActive }) =>
+              `hover:text-foreground transition font-medium px-2 py-1 rounded ${
+                isActive ? "text-foreground bg-muted" : ""
+            }`
+          }
+        >
+          Projects
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
           to="/contact"
           className={({ isActive }) =>
               `hover:text-foreground transition font-medium px-2 py-1 rounded ${
