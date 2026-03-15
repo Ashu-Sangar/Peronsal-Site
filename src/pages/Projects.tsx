@@ -18,6 +18,8 @@ type ProjectDetail = {
   liveUrl?: string;
   longDescription: string;
   image?: string;
+  video?: string;
+  mediaHint?: string;
   highlights: string[];
 };
 
@@ -43,6 +45,9 @@ const projectsData: ProjectDetail[] = [
       { name: "Tailwind CSS 4", color: "bg-teal-600 text-white" },
       { name: "Upstash Redis", color: "bg-red-500 text-white" },
     ],
+    // video: "/img/keepsake-demo.mp4",  ← record a 5-10s GIF/video of the canvas drag, live cursors, or AI bg removal
+    // image: "/img/keepsake.png",       ← or drop a screenshot here instead
+    mediaHint: "Record a short clip of the canvas — drag elements, live cursors, or AI bg removal",
     liveUrl: "https://keepsake.ashusangar.com",
   },
   {
@@ -65,6 +70,8 @@ const projectsData: ProjectDetail[] = [
       { name: "Pydantic", color: "bg-rose-500 text-white" },
       { name: "TypeScript", color: "bg-blue-600 text-white" },
     ],
+    // image: "/img/altus.png",   ← screenshot of the dashboard/session tracking view
+    mediaHint: "Screenshot the dashboard — session tracking, focus score, or main UI",
     github: "https://github.com/Ashu-Sangar/atlus-ai",
   },
   {
@@ -89,6 +96,9 @@ const projectsData: ProjectDetail[] = [
       { name: "Computer Vision", color: "bg-teal-600 text-white" },
       { name: "Motion Capture", color: "bg-amber-600 text-white" },
     ],
+    // video: "/img/feagi-demo.mp4",  ← most impactful: a clip of body movement driving the 3D character
+    // image: "/img/feagi.png",       ← or a screenshot of Blender with the character
+    mediaHint: "Best as a video — body movement driving the 3D character in Blender. Check the GitHub repo for existing demo clips",
     github: "https://github.com/feagi/blender-connector",
   },
   {
@@ -111,6 +121,8 @@ const projectsData: ProjectDetail[] = [
       { name: "Pandas", color: "bg-orange-500 text-white" },
       { name: "Scikit-learn", color: "bg-red-500 text-white" },
     ],
+    // image: "/img/legal-nlp.png",  ← screenshot of search results: query in, ranked cases out
+    mediaHint: "Screenshot of search results — query input and ranked legal case output",
     github: "https://github.com/Ashu-Sangar/NLP-Legal-Precedent",
   },
 ];
@@ -188,16 +200,26 @@ export default function Projects() {
                       className="overflow-hidden"
                     >
                       <div className="px-5 pb-5 border-t border-border pt-4">
-                        {/* Image placeholder */}
-                        {project.image ? (
+                        {/* Media: video > image > placeholder */}
+                        {project.video ? (
+                          <video
+                            src={project.video}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-48 object-cover rounded-lg mb-4"
+                          />
+                        ) : project.image ? (
                           <img
                             src={project.image}
                             alt={`${project.name} screenshot`}
                             className="w-full h-48 object-cover rounded-lg mb-4"
                           />
                         ) : (
-                          <div className="w-full h-48 bg-muted rounded-lg mb-4 flex items-center justify-center text-muted-foreground text-sm">
-                            Screenshot coming soon
+                          <div className="w-full h-48 bg-muted rounded-lg mb-4 flex flex-col items-center justify-center gap-1 text-muted-foreground text-sm">
+                            <span>{project.mediaHint ?? "Media coming soon"}</span>
+                            <span className="text-xs opacity-60">Add an image or video to <code className="font-mono">public/img/</code></span>
                           </div>
                         )}
 
