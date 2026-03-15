@@ -261,8 +261,9 @@ export default function Projects() {
                   )}
                 </AnimatePresence>
               </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerReveal>
         </section>
       </main>
       <Footer />
