@@ -6,6 +6,7 @@ import PhotoFlipCard from "@/components/PhotoFlipCard";
 import Timeline from "@/components/about/Timeline";
 import Hobbies from "@/components/about/Hobbies";
 import { ArrowRight } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 // You can update these with your actual images and captions!
 const photos = [
@@ -63,40 +64,47 @@ export default function About() {
           {/* Photos Row */}
           <div className="flex gap-5 justify-center mb-12 flex-wrap">
             {photos.map((p, i) => (
-              <div
-                className={`hover-scale`}
-                key={i}
-                style={{
-                  transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
-                }}
-              >
-                <PhotoFlipCard
-                  frontSrc={p.src}
-                  alt={p.alt}
-                  backText={p.backText}
-                  setIsDragging={setIsDraggingPhoto}
-                />
-              </div>
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div
+                  className={`hover-scale`}
+                  style={{
+                    transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
+                  }}
+                >
+                  <PhotoFlipCard
+                    frontSrc={p.src}
+                    alt={p.alt}
+                    backText={p.backText}
+                    setIsDragging={setIsDraggingPhoto}
+                  />
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
         {/* --- Timeline & Hobbies --- */}
         <section className="w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-8 justify-center">
-          <Timeline items={timelineData} dragging={isDraggingPhoto} />
-          <Hobbies dragging={isDraggingPhoto} />
+          <ScrollReveal className="w-full md:w-1/2">
+            <Timeline items={timelineData} dragging={isDraggingPhoto} />
+          </ScrollReveal>
+          <ScrollReveal delay={0.1} className="w-full md:w-1/2">
+            <Hobbies dragging={isDraggingPhoto} />
+          </ScrollReveal>
         </section>
 
         {/* Projects link */}
-        <section className="w-full max-w-4xl mx-auto mt-8 mb-4 text-center">
-          <Link
-            to="/projects"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition font-medium text-sm"
-          >
-            See my projects
-            <ArrowRight size={16} />
-          </Link>
-        </section>
+        <ScrollReveal delay={0.1}>
+          <section className="w-full max-w-4xl mx-auto mt-8 mb-4 text-center">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition font-medium text-sm"
+            >
+              See my projects
+              <ArrowRight size={16} />
+            </Link>
+          </section>
+        </ScrollReveal>
       </main>
       <Footer />
     </div>

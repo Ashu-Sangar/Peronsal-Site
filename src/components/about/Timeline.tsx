@@ -1,4 +1,5 @@
 import React from "react";
+import { StaggerReveal, StaggerItem } from "@/components/StaggerReveal";
 
 type TimelineItem = {
   company: string;
@@ -14,12 +15,13 @@ type TimelineProps = {
 };
 
 const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
-  <div className={`w-full md:w-1/2${dragging ? ' pointer-events-none' : ''}`}>
+  <div className={`w-full${dragging ? ' pointer-events-none' : ''}`}>
     <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Timeline</h3>
-    <ol className="border-l border-border">
+    <StaggerReveal>
+      <ol className="border-l border-border">
       {items.map((item, index) => (
+        <StaggerItem key={index}>
         <li
-          key={index}
           className="relative pl-8 pb-8 last:pb-0 transition-transform duration-200 hover:scale-105"
         >
           <span
@@ -34,8 +36,10 @@ const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
             <li>{item.details}</li>
           </ul>
         </li>
+        </StaggerItem>
       ))}
     </ol>
+    </StaggerReveal>
   </div>
 );
 

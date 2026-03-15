@@ -1,4 +1,5 @@
 import React from "react";
+import { StaggerReveal, StaggerItem } from "@/components/StaggerReveal";
 
 const interests = [
   {
@@ -29,20 +30,21 @@ const interests = [
 
 type HobbiesProps = { dragging?: boolean };
 const Hobbies: React.FC<HobbiesProps> = ({ dragging }) => (
-  <div className={`w-full md:w-1/2 flex flex-col gap-5${dragging ? ' pointer-events-none' : ''}`}>
+  <div className={`w-full flex flex-col gap-5${dragging ? ' pointer-events-none' : ''}`}>
     <h3 className="font-semibold text-lg mb-6 text-center text-foreground">Interests & Learning</h3>
-    <div className="flex flex-col gap-4">
+    <StaggerReveal className="flex flex-col gap-4">
       {interests.map((interest, idx) => (
+        <StaggerItem key={interest.title}>
         <div
-          key={interest.title}
           className="transition-transform duration-200 hover:scale-105 bg-card border border-border rounded-xl p-4"
         >
           <span className="font-bold text-foreground">{interest.title}</span>
           <div className="text-md text-foreground/80">{interest.description}</div>
           <div className={`${interest.statColor} text-sm`}>{interest.stat}</div>
         </div>
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerReveal>
   </div>
 );
 

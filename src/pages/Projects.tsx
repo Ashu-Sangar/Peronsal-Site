@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Github, ExternalLink, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { StaggerReveal, StaggerItem } from "@/components/StaggerReveal";
 
 type Tag = {
   name: string;
@@ -133,10 +134,10 @@ export default function Projects() {
             Things I've built.
           </p>
 
-          <div className="flex flex-col gap-4">
+          <StaggerReveal className="flex flex-col gap-4">
             {projectsData.map((project, index) => (
+              <StaggerItem key={index}>
               <div
-                key={index}
                 className="bg-card border border-border rounded-xl overflow-hidden transition-shadow duration-200 hover:shadow-lg"
               >
                 {/* Collapsed card header */}
