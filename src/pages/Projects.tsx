@@ -125,6 +125,20 @@ const projectsData: ProjectDetail[] = [
 export default function Projects() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
+  // Preload all project media so expanding feels instant
+  React.useEffect(() => {
+    projectsData.forEach((project) => {
+      if (project.video) {
+        const video = document.createElement("video");
+        video.preload = "auto";
+        video.src = project.video;
+      } else if (project.image) {
+        const img = new Image();
+        img.src = project.image;
+      }
+    });
+  }, []);
+
   const toggle = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
   };
