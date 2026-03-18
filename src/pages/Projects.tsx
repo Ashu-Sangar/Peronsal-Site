@@ -45,9 +45,7 @@ const projectsData: ProjectDetail[] = [
       { name: "Tailwind CSS 4", color: "bg-teal-600 text-white" },
       { name: "Upstash Redis", color: "bg-red-500 text-white" },
     ],
-    // video: "/img/keepsake-demo.mp4",  ← record a 5-10s GIF/video of the canvas drag, live cursors, or AI bg removal
-    // image: "/img/keepsake.png",       ← or drop a screenshot here instead
-    mediaHint: "Record a short clip of the canvas — drag elements, live cursors, or AI bg removal",
+    video: "/project_showcase/Keepsake.mp4",
     liveUrl: "https://keepsake.ashusangar.com",
   },
   {
@@ -96,9 +94,7 @@ const projectsData: ProjectDetail[] = [
       { name: "Computer Vision", color: "bg-teal-600 text-white" },
       { name: "Motion Capture", color: "bg-amber-600 text-white" },
     ],
-    // video: "/img/feagi-demo.mp4",  ← most impactful: a clip of body movement driving the 3D character
-    // image: "/img/feagi.png",       ← or a screenshot of Blender with the character
-    mediaHint: "Best as a video — body movement driving the 3D character in Blender. Check the GitHub repo for existing demo clips",
+    video: "/project_showcase/blender_connector.mp4",
     github: "https://github.com/feagi/blender-connector",
   },
   {
@@ -208,7 +204,7 @@ export default function Projects() {
                             loop
                             muted
                             playsInline
-                            className="w-full h-48 object-cover rounded-lg mb-4"
+                            className="w-full rounded-lg mb-4"
                           />
                         ) : project.image ? (
                           <img
