@@ -48,30 +48,30 @@ const projectsData: ProjectDetail[] = [
     video: "/project_showcase/Keepsake.mp4",
     liveUrl: "https://keepsake.ashusangar.com",
   },
-  {
-    name: "Altus",
-    description:
-      "Full-stack productivity platform that quantifies focus quality. Features real-time session tracking, secure authentication, and rigid server-side data validation.",
-    longDescription:
-      "Designed and built a productivity tool that goes beyond simple time tracking by measuring focus quality through session analytics. The backend uses FastAPI with Pydantic for strict schema validation, ensuring data integrity across all endpoints. Firebase Auth handles secure user sessions, while Firestore provides real-time data sync for seamless cross-device usage.",
-    highlights: [
-      "Focus quality scoring algorithm based on session patterns",
-      "Strict server-side validation with Pydantic models",
-      "Real-time data sync across devices via Firestore",
-      "Secure authentication flow with Firebase Auth",
-    ],
-    tags: [
-      { name: "Next.js 14", color: "bg-black text-white" },
-      { name: "FastAPI (Python)", color: "bg-teal-600 text-white" },
-      { name: "Firebase Auth", color: "bg-amber-500 text-black" },
-      { name: "Firestore", color: "bg-orange-600 text-white" },
-      { name: "Pydantic", color: "bg-rose-500 text-white" },
-      { name: "TypeScript", color: "bg-blue-600 text-white" },
-    ],
-    // image: "/img/altus.png",   ← screenshot of the dashboard/session tracking view
-    mediaHint: "Screenshot the dashboard — session tracking, focus score, or main UI",
-    github: "https://github.com/Ashu-Sangar/atlus-ai",
-  },
+  // {
+  //   name: "Altus",
+  //   description:
+  //     "Full-stack productivity platform that quantifies focus quality. Features real-time session tracking, secure authentication, and rigid server-side data validation.",
+  //   longDescription:
+  //     "Designed and built a productivity tool that goes beyond simple time tracking by measuring focus quality through session analytics. The backend uses FastAPI with Pydantic for strict schema validation, ensuring data integrity across all endpoints. Firebase Auth handles secure user sessions, while Firestore provides real-time data sync for seamless cross-device usage.",
+  //   highlights: [
+  //     "Focus quality scoring algorithm based on session patterns",
+  //     "Strict server-side validation with Pydantic models",
+  //     "Real-time data sync across devices via Firestore",
+  //     "Secure authentication flow with Firebase Auth",
+  //   ],
+  //   tags: [
+  //     { name: "Next.js 14", color: "bg-black text-white" },
+  //     { name: "FastAPI (Python)", color: "bg-teal-600 text-white" },
+  //     { name: "Firebase Auth", color: "bg-amber-500 text-black" },
+  //     { name: "Firestore", color: "bg-orange-600 text-white" },
+  //     { name: "Pydantic", color: "bg-rose-500 text-white" },
+  //     { name: "TypeScript", color: "bg-blue-600 text-white" },
+  //   ],
+  //   // image: "/img/altus.png",
+  //   mediaHint: "Screenshot the dashboard — session tracking, focus score, or main UI",
+  //   github: "https://github.com/Ashu-Sangar/atlus-ai",
+  // },
   {
     name: "FEAGI-Blender Integration",
     description:
@@ -117,8 +117,7 @@ const projectsData: ProjectDetail[] = [
       { name: "Pandas", color: "bg-orange-500 text-white" },
       { name: "Scikit-learn", color: "bg-red-500 text-white" },
     ],
-    // image: "/img/legal-nlp.png",  ← screenshot of search results: query in, ranked cases out
-    mediaHint: "Screenshot of search results — query input and ranked legal case output",
+    image: "/project_showcase/NLP.png",
     github: "https://github.com/Ashu-Sangar/NLP-Legal-Precedent",
   },
 ];
@@ -210,7 +209,7 @@ export default function Projects() {
                           <img
                             src={project.image}
                             alt={`${project.name} screenshot`}
-                            className="w-full h-48 object-cover rounded-lg mb-4"
+                            className="w-full max-h-80 object-contain rounded-lg mb-4"
                           />
                         ) : (
                           <div className="w-full h-48 bg-muted rounded-lg mb-4 flex flex-col items-center justify-center gap-1 text-muted-foreground text-sm">
