@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PhotoFlipCard from "@/components/PhotoFlipCard";
 import Timeline from "@/components/about/Timeline";
-import Projects from "@/components/about/Projects";
 import Hobbies from "@/components/about/Hobbies";
+import { ArrowRight } from "lucide-react";
+import ScrollReveal from "@/components/ScrollReveal";
 
 // You can update these with your actual images and captions!
 const photos = [
@@ -49,68 +51,6 @@ const timelineData = [
   },
 ];
 
-const projectsData = [
-  {
-    name: "Keepsake",
-    description: "Real-time collaborative digital scrapbook with drag-and-drop canvas, live cursor tracking, AI background removal, and operation-based undo/redo. Features multi-spread pagination, smart snapping, and role-based access control.",
-    tags: [
-      { name: "Next.js 16", color: "bg-black text-white" },
-      { name: "React 19", color: "bg-cyan-500 text-white" },
-      { name: "TypeScript", color: "bg-blue-600 text-white" },
-      { name: "Supabase", color: "bg-green-600 text-white" },
-      { name: "Framer Motion", color: "bg-pink-600 text-white" },
-      { name: "Tailwind CSS 4", color: "bg-teal-600 text-white" },
-      { name: "Upstash Redis", color: "bg-red-500 text-white" },
-    ],
-    liveUrl: "https://keepsake.ashusangar.com"
-  },
-  {
-    name: "Altus",
-    description: "Full-stack productivity platform that quantifies focus quality. Features real-time session tracking, secure authentication, and rigid server-side data validation.",
-    tags: [
-      { name: "Next.js 14", color: "bg-black text-white" },
-      { name: "FastAPI (Python)", color: "bg-teal-600 text-white" },
-      { name: "Firebase Auth", color: "bg-amber-500 text-black" },
-      { name: "Firestore", color: "bg-orange-600 text-white" },
-      { name: "Pydantic", color: "bg-rose-500 text-white" },
-      { name: "TypeScript", color: "bg-blue-600 text-white" },
-    ],
-    // Update this link once you rename your repo!
-    github: "https://github.com/Ashu-Sangar/atlus-ai"
-  },
-  {
-    name: "FEAGI-Blender Integration",
-    description: "Real-time AI-human interface translating body movements into 3D simulations with 99% performance optimization and automated character binding system.",
-    tags: [
-      { name: "Python", color: "bg-gray-600 text-white" },
-      { name: "Docker", color: "bg-cyan-500 text-white" },
-      { name: "Blender API", color: "bg-gray-200 text-black" },
-      { name: "FEAGI", color: "bg-green-600 text-white" },
-      { name: "WebSocket", color: "bg-pink-600 text-white" },
-      { name: "RESTful APIs", color: "bg-indigo-600 text-white" },
-      { name: "Computer Vision", color: "bg-teal-600 text-white" },
-      { name: "Motion Capture", color: "bg-amber-600 text-white" },
-      { name: "JSON", color: "bg-orange-600 text-white" },
-      { name: "UDP", color: "bg-blue-500 text-white" },
-      { name: "ZMQ", color: "bg-red-500 text-white" },
-      { name: "LZ4", color: "bg-purple-500 text-white" },
-    ],
-    github: "https://github.com/feagi/blender-connector"
-  },
-  {
-    name: "Legal Precedent Retrieval System Using NLP",
-    description: "System for legal precedent retrieval, utilizing ML models to classify, search, and rank case law documents.",
-    tags: [
-      { name: "Python", color: "bg-cyan-500 text-white" },
-      { name: "Natural Language Processing (NLP)", color: "bg-yellow-400 text-black" },
-      { name: "BM25", color: "bg-green-600 text-white" },
-      { name: "ColBERT", color: "bg-gray-200 text-black" },
-      { name: "Pandas", color: "bg-orange-500 text-white" },
-      { name: "Scikit-learn ", color: "bg-red-500 text-white" },
-    ],
-    github: "https://github.com/Ashu-Sangar/NLP-Legal-Precedent"
-  },
-];
 
 export default function About() {
   const [isDraggingPhoto, setIsDraggingPhoto] = useState(false);
@@ -124,30 +64,47 @@ export default function About() {
           {/* Photos Row */}
           <div className="flex gap-5 justify-center mb-12 flex-wrap">
             {photos.map((p, i) => (
-              <div
-                className={`hover-scale`}
-                key={i}
-                style={{
-                  transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
-                }}
-              >
-                <PhotoFlipCard
-                  frontSrc={p.src}
-                  alt={p.alt}
-                  backText={p.backText}
-                  setIsDragging={setIsDraggingPhoto}
-                />
-              </div>
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <div
+                  className={`hover-scale`}
+                  style={{
+                    transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
+                  }}
+                >
+                  <PhotoFlipCard
+                    frontSrc={p.src}
+                    alt={p.alt}
+                    backText={p.backText}
+                    setIsDragging={setIsDraggingPhoto}
+                  />
+                </div>
+              </ScrollReveal>
             ))}
           </div>
         </section>
 
-        {/* --- Timeline, Projects & Hobbies --- */}
-        <section className="w-full max-w-5xl mx-auto flex flex-col md:flex-row gap-8 md:gap-4">
-          <Timeline items={timelineData} dragging={isDraggingPhoto} />
-          <Projects projects={projectsData} dragging={isDraggingPhoto} />
-          <Hobbies dragging={isDraggingPhoto} />
+        {/* --- Timeline & Hobbies --- */}
+        <section className="w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-8 justify-center">
+          <ScrollReveal className="w-full md:w-1/2">
+            <Timeline items={timelineData} dragging={isDraggingPhoto} />
+          </ScrollReveal>
+          <ScrollReveal delay={0.1} className="w-full md:w-1/2">
+            <Hobbies dragging={isDraggingPhoto} />
+          </ScrollReveal>
         </section>
+
+        {/* Projects link */}
+        <ScrollReveal delay={0.1}>
+          <section className="w-full max-w-4xl mx-auto mt-8 mb-4 text-center">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition font-medium text-sm"
+            >
+              See my projects
+              <ArrowRight size={16} />
+            </Link>
+          </section>
+        </ScrollReveal>
       </main>
       <Footer />
     </div>

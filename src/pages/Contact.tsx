@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useState } from "react";
+import ScrollReveal from "@/components/ScrollReveal";
+import { StaggerReveal, StaggerItem } from "@/components/StaggerReveal";
 
 // Utility card for contact links
 const ContactCard = ({
@@ -74,26 +76,33 @@ export default function Contact() {
           <p className="mb-7 text-muted-foreground text-center text-base">
             Connect with me through any of these platforms.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-10">
-            <ContactCard
-              icon={<Mail size={22} className="text-foreground" />}
-              label="Email"
-              value="ashu.sangar.dev@gmail.com"
-              href="mailto:ashu.sangar.dev@gmail.com"
-            />
-            <ContactCard
-              icon={<Instagram size={22} className="text-foreground" />}
-              label="Instagram"
-              value="@ashuknows"
-              href="https://instagram.com/ashuknows"
-            />
-            <ContactCard
-              icon={<Linkedin size={22} className="text-foreground" />}
-              label="LinkedIn"
-              value="in/ashu-sangar"
-              href="https://linkedin.com/in/ashu-sangar"
-            />
-          </div>
+          <StaggerReveal className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-10">
+            <StaggerItem>
+              <ContactCard
+                icon={<Mail size={22} className="text-foreground" />}
+                label="Email"
+                value="ashu.sangar.dev@gmail.com"
+                href="mailto:ashu.sangar.dev@gmail.com"
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ContactCard
+                icon={<Instagram size={22} className="text-foreground" />}
+                label="Instagram"
+                value="@ashuknows"
+                href="https://instagram.com/ashuknows"
+              />
+            </StaggerItem>
+            <StaggerItem>
+              <ContactCard
+                icon={<Linkedin size={22} className="text-foreground" />}
+                label="LinkedIn"
+                value="in/ashu-sangar"
+                href="https://linkedin.com/in/ashu-sangar"
+              />
+            </StaggerItem>
+          </StaggerReveal>
+          <ScrollReveal delay={0.1} className="w-full">
           <section className="w-full">
             <h2 className="text-xl font-semibold text-foreground mb-1">Book a Call</h2>
             <p className="text-muted-foreground text-base mb-6">
@@ -186,6 +195,7 @@ export default function Contact() {
               </div>
             </div>
           </section>
+          </ScrollReveal>
         </div>
       </main>
       <Footer />
