@@ -1,88 +1,81 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSpotify } from '../hooks/useSpotify';
 import { Spotify } from 'react-spotify-embed';
-import FadeIn from '../utils/FadeIn';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle } from 'lucide-react';
 
 type TrackListType = 'recent' | 'top';
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+const listVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: EASE },
+  },
+};
+
 const SpotifyPlaying = () => {
-  const { 
-    currentTrack, 
-    recentTracks, 
-    topTracks, 
-    isLoading, 
+  const {
+    currentTrack,
+    recentTracks,
+    topTracks,
+    isLoading,
     error,
-    refetch 
+    refetch
   } = useSpotify();
-  
+
   const [activeList, setActiveList] = useState<TrackListType>('recent');
   const [displayTrack, setDisplayTrack] = useState<any>(null);
   const [tracksList, setTracksList] = useState<any[]>([]);
   const tracksRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Always show current track if it exists, otherwise show first recent track as fallback
-    // This display track should NOT change when switching tabs
     const mainDisplayTrack = currentTrack || (recentTracks.length > 0 ? recentTracks[0] : null);
     setDisplayTrack(mainDisplayTrack);
 
-    // Helper function to remove duplicates and filter out main display track
     const getUniqueFilteredTracks = (tracks: any[], mainTrack: any) => {
       if (!tracks || tracks.length === 0) return [];
-      
-      // Create a Map to track unique tracks by ID
       const uniqueTracksMap = new Map();
-      
       tracks.forEach(track => {
         if (track?.id && track.id !== mainTrack?.id) {
-          // Only keep the first occurrence of each track
           if (!uniqueTracksMap.has(track.id)) {
             uniqueTracksMap.set(track.id, track);
           }
         }
       });
-      
       return Array.from(uniqueTracksMap.values()).slice(0, 4);
     };
 
-    // Only the side tracks list changes based on active tab
     if (activeList === 'top') {
-      const uniqueTopTracks = getUniqueFilteredTracks(topTracks, mainDisplayTrack);
-      setTracksList(uniqueTopTracks);
+      setTracksList(getUniqueFilteredTracks(topTracks, mainDisplayTrack));
     } else {
-      const uniqueRecentTracks = getUniqueFilteredTracks(recentTracks, mainDisplayTrack);
-      setTracksList(uniqueRecentTracks);
+      setTracksList(getUniqueFilteredTracks(recentTracks, mainDisplayTrack));
     }
   }, [activeList, currentTrack, recentTracks, topTracks]);
 
   const handleTabClick = (type: TrackListType) => {
     setActiveList(type);
-    
-    // Check if tracks section is not fully visible
     if (tracksRef.current) {
       const rect = tracksRef.current.getBoundingClientRect();
-      const isFullyVisible = (
-        rect.top >= 0 &&
-        rect.bottom <= window.innerHeight
-      );
-      
-      // Only scroll if not fully visible
+      const isFullyVisible = rect.top >= 0 && rect.bottom <= window.innerHeight;
       if (!isFullyVisible) {
-        tracksRef.current.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'nearest'
-        });
+        tracksRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
     }
   };
 
-
-
   const renderError = (errorMessage: string | null) => {
     if (!errorMessage) return null;
-    
     return (
       <div className="flex items-center gap-2 text-red-400 text-sm mt-2">
         <AlertCircle size={16} />
@@ -91,19 +84,17 @@ const SpotifyPlaying = () => {
     );
   };
 
-  const renderLoadingState = () => (
-    <div className="animate-pulse space-y-4">
-      <div className="h-[352px] bg-muted rounded-lg"></div>
-      <div className="space-y-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
-        ))}
-      </div>
-    </div>
-  );
-
   if (isLoading.current && isLoading.recent && isLoading.top) {
-    return renderLoadingState();
+    return (
+      <div className="animate-pulse space-y-4">
+        <div className="h-[352px] bg-muted rounded-lg" />
+        <div className="space-y-3">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-[80px] bg-muted rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -111,14 +102,12 @@ const SpotifyPlaying = () => {
       {/* Header with title and buttons */}
       <div className="mb-6 mt-8">
         <div className="flex justify-between items-start mb-4">
-          <h2 className="text-2xl font-bold">
-            {'Currently Playing'}
-          </h2>
-          {/* Tab buttons */}
+          <h2 className="text-2xl font-bold">Currently Playing</h2>
+          {/* Tab buttons — desktop */}
           <div className="relative flex bg-muted rounded-full p-1 gap-1 shadow-inner min-w-[260px]">
             <button
               onClick={() => handleTabClick('recent')}
-              className={`relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden`}
+              className="relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden"
               style={{ zIndex: activeList === 'recent' ? 2 : 1 }}
             >
               {activeList === 'recent' && (
@@ -132,7 +121,7 @@ const SpotifyPlaying = () => {
             </button>
             <button
               onClick={() => handleTabClick('top')}
-              className={`relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden`}
+              className="relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden"
               style={{ zIndex: activeList === 'top' ? 2 : 1 }}
             >
               {activeList === 'top' && (
@@ -148,11 +137,10 @@ const SpotifyPlaying = () => {
         </div>
         {renderError(activeList === 'top' ? error.top : error.recent)}
       </div>
-      
+
       <div className="flex flex-col md:flex-row md:gap-4">
         {/* Main Track Display */}
         <div className="w-full md:w-1/2 mb-4 md:mb-0">
-          {/* Mobile Title */}
           <div className="mb-4 sm:hidden">
             <h2 className="text-lg font-semibold">
               {currentTrack ? 'Now Playing' : (activeList === 'top' ? '#1 Track This Month' : 'Recently Played')}
@@ -162,23 +150,16 @@ const SpotifyPlaying = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={displayTrack?.spotifyUrl || displayTrack?.id || activeList}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
               {displayTrack && (
                 <>
-                  <Spotify 
-                    wide
-                    link={displayTrack.spotifyUrl}
-                    className="w-full sm:hidden"
-                  />
-                  <Spotify 
-                    link={displayTrack.spotifyUrl}
-                    className="hidden sm:block w-full"
-                  />
-                  {/* Mobile Buttons - Only shown when track is playing */}
+                  <Spotify wide link={displayTrack.spotifyUrl} className="w-full sm:hidden" />
+                  <Spotify link={displayTrack.spotifyUrl} className="hidden sm:block w-full" />
+                  {/* Mobile tab buttons */}
                   <div className="mt-4 sm:hidden">
                     <div className="flex space-x-2">
                       <button
@@ -209,34 +190,37 @@ const SpotifyPlaying = () => {
           </AnimatePresence>
         </div>
 
-        {/* Recent/Top Tracks List */}
+        {/* Tracks List */}
         <div ref={tracksRef} className="w-full md:w-1/2">
           {(isLoading.recent || isLoading.top) ? (
             <div className="animate-pulse space-y-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
+                <div key={i} className="h-[80px] bg-muted rounded-lg" />
               ))}
             </div>
           ) : (
-            <motion.div
-              key={activeList + tracksList.length}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-            >
-              <div className="grid gap-3">
-                {tracksList.map((track, index) => (
-                  <FadeIn key={index} delay={1 + index * 0.3}>
-                    <Spotify 
-                      wide 
-                      link={track.spotifyUrl}
-                      className="w-full"
-                    />
-                  </FadeIn>
-                ))}
-              </div>
-            </motion.div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeList}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.div
+                  className="grid gap-3"
+                  variants={listVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {tracksList.map((track, index) => (
+                    <motion.div key={track.id || index} variants={itemVariants}>
+                      <Spotify wide link={track.spotifyUrl} className="w-full" />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </AnimatePresence>
           )}
         </div>
       </div>
@@ -244,4 +228,4 @@ const SpotifyPlaying = () => {
   );
 };
 
-export default SpotifyPlaying; 
+export default SpotifyPlaying;
