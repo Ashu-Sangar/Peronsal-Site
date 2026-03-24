@@ -24,6 +24,51 @@ const itemVariants = {
   },
 };
 
+/** Wraps a Spotify iframe embed with a skeleton that fades out once the iframe loads. */
+const SpotifyEmbed = ({ link, wide, className }: { link: string; wide?: boolean; className?: string }) => {
+  const [loaded, setLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLoaded(false);
+    const el = ref.current;
+    if (!el) return;
+
+    // The iframe may already be in the DOM or added on next tick
+    const attach = () => {
+      const iframe = el.querySelector('iframe');
+      if (!iframe) return false;
+      iframe.addEventListener('load', () => setLoaded(true), { once: true });
+      return true;
+    };
+
+    if (!attach()) {
+      // iframe not yet rendered — watch for it
+      const obs = new MutationObserver(() => {
+        if (attach()) obs.disconnect();
+      });
+      obs.observe(el, { childList: true, subtree: true });
+      return () => obs.disconnect();
+    }
+  }, [link]);
+
+  return (
+    <div ref={ref} className="relative">
+      {/* Skeleton shown until iframe loads */}
+      <div
+        className={`absolute inset-0 bg-muted rounded-xl animate-pulse transition-opacity duration-300 ${
+          loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+        style={{ minHeight: wide ? 80 : 352 }}
+      />
+      {/* Actual embed — invisible until loaded */}
+      <div className={`transition-opacity duration-500 ease-out ${loaded ? 'opacity-100' : 'opacity-0'}`}>
+        <Spotify wide={wide} link={link} className={className} />
+      </div>
+    </div>
+  );
+};
+
 const SpotifyPlaying = () => {
   const {
     currentTrack,
@@ -157,8 +202,8 @@ const SpotifyPlaying = () => {
             >
               {displayTrack && (
                 <>
-                  <Spotify wide link={displayTrack.spotifyUrl} className="w-full sm:hidden" />
-                  <Spotify link={displayTrack.spotifyUrl} className="hidden sm:block w-full" />
+                  <SpotifyEmbed wide link={displayTrack.spotifyUrl} className="w-full sm:hidden" />
+                  <SpotifyEmbed link={displayTrack.spotifyUrl} className="hidden sm:block w-full" />
                   {/* Mobile tab buttons */}
                   <div className="mt-4 sm:hidden">
                     <div className="flex space-x-2">
@@ -215,7 +260,7 @@ const SpotifyPlaying = () => {
                 >
                   {tracksList.map((track, index) => (
                     <motion.div key={track.id || index} variants={itemVariants}>
-                      <Spotify wide link={track.spotifyUrl} className="w-full" />
+                      <SpotifyEmbed wide link={track.spotifyUrl} className="w-full" />
                     </motion.div>
                   ))}
                 </motion.div>
