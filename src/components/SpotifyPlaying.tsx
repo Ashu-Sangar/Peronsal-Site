@@ -6,86 +6,22 @@ import { AlertCircle } from 'lucide-react';
 
 type TrackListType = 'recent' | 'top';
 
-// Wrapper that reserves space and fades in the iframe once loaded
-const SpotifyEmbed = ({
-  link,
-  wide,
-  className,
-  index = 0,
-}: {
-  link: string;
-  wide?: boolean;
-  className?: string;
-  index?: number;
-}) => {
-  const [loaded, setLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Listen for the iframe load event
-    const container = containerRef.current;
-    if (!container) return;
-
-    const observer = new MutationObserver(() => {
-      const iframe = container.querySelector('iframe');
-      if (iframe) {
-        iframe.addEventListener('load', () => setLoaded(true), { once: true });
-        // If iframe already loaded before we attached
-        if (iframe.contentDocument?.readyState === 'complete') {
-          setLoaded(true);
-        }
-        observer.disconnect();
-      }
-    });
-
-    observer.observe(container, { childList: true, subtree: true });
-
-    // Also check if iframe is already present
-    const existingIframe = container.querySelector('iframe');
-    if (existingIframe) {
-      existingIframe.addEventListener('load', () => setLoaded(true), { once: true });
-      observer.disconnect();
-    }
-
-    // Fallback: reveal after timeout to prevent permanent skeleton
-    const fallback = setTimeout(() => setLoaded(true), 3000);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(fallback);
-    };
-  }, [link]);
-
-  return (
-    <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{
-        duration: 0.35,
-        delay: index * 0.08,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      className={`relative ${wide ? 'min-h-[80px]' : 'min-h-[152px]'}`}
-    >
-      {/* Skeleton placeholder */}
-      <div
-        className={`absolute inset-0 bg-muted rounded-xl animate-pulse transition-opacity duration-300 ${
-          loaded ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      />
-      {/* Actual embed - opacity transitions from invisible to visible */}
-      <div
-        className={`transition-opacity duration-300 ${
-          loaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <Spotify wide={wide} link={link} className={className} />
-      </div>
-    </motion.div>
-  );
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.07 },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.15 },
+  },
 };
 
+const staggerItem = {
+  hidden: { opacity: 0, y: 10 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } },
+};
 
 const SpotifyPlaying = () => {
   const {
@@ -210,45 +146,37 @@ const SpotifyPlaying = () => {
             </h2>
             {renderError(error.current || (activeList === 'top' ? error.top : error.recent))}
           </div>
-          <AnimatePresence mode="wait">
-            {displayTrack && (
-              <motion.div
-                key={displayTrack.id}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-              >
-                <SpotifyEmbed wide link={displayTrack.spotifyUrl} className="w-full sm:hidden" />
-                <SpotifyEmbed link={displayTrack.spotifyUrl} className="hidden sm:block w-full" />
-                {/* Mobile tab buttons */}
-                <div className="mt-4 sm:hidden">
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => handleTabClick('recent')}
-                      className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 cursor-pointer ${
-                        activeList === 'recent'
-                          ? 'bg-muted text-foreground font-medium'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      Recently Played
-                    </button>
-                    <button
-                      onClick={() => handleTabClick('top')}
-                      className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 cursor-pointer ${
-                        activeList === 'top'
-                          ? 'bg-muted text-foreground font-medium'
-                          : 'text-muted-foreground hover:text-foreground'
-                      }`}
-                    >
-                      Top Tracks
-                    </button>
-                  </div>
+          {displayTrack && (
+            <>
+              <Spotify wide link={displayTrack.spotifyUrl} className="w-full sm:hidden" />
+              <Spotify link={displayTrack.spotifyUrl} className="hidden sm:block w-full" />
+              {/* Mobile tab buttons */}
+              <div className="mt-4 sm:hidden">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => handleTabClick('recent')}
+                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 cursor-pointer ${
+                      activeList === 'recent'
+                        ? 'bg-muted text-foreground font-medium'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    Recently Played
+                  </button>
+                  <button
+                    onClick={() => handleTabClick('top')}
+                    className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 cursor-pointer ${
+                      activeList === 'top'
+                        ? 'bg-muted text-foreground font-medium'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    Top Tracks
+                  </button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Tracks List */}
@@ -263,20 +191,16 @@ const SpotifyPlaying = () => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeList}
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -8 }}
-                transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                exit="exit"
                 className="grid gap-3"
               >
                 {tracksList.map((track, index) => (
-                  <SpotifyEmbed
-                    key={track.id || index}
-                    wide
-                    link={track.spotifyUrl}
-                    className="w-full"
-                    index={index}
-                  />
+                  <motion.div key={track.id || index} variants={staggerItem}>
+                    <Spotify wide link={track.spotifyUrl} className="w-full" />
+                  </motion.div>
                 ))}
               </motion.div>
             </AnimatePresence>
