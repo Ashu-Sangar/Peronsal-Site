@@ -1,42 +1,54 @@
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-const fullText = "hello, ashu here";
+const words = ["hello,", "ashu", "here"];
+const STAGGER = 0.14;
+const DURATION = 0.7;
+const EASE = [0.22, 1, 0.36, 1] as const;
+const cursorDelay = (words.length - 1) * STAGGER + DURATION;
+const subtitleDelay = cursorDelay + 0.15;
 
-const Intro = () => {
-  const [typed, setTyped] = useState("");
-
-  useEffect(() => {
-    if (typed.length >= fullText.length) return;
-
-    const prevChar = typed.length > 0 ? fullText[typed.length - 1] : "";
-    // Natural rhythm: pause after comma, slight randomness elsewhere
-    let delay = 65 + Math.random() * 45; // 65-110ms
-    if (prevChar === ",") delay = 280; // breathe after comma
-
-    const timeout = setTimeout(() => {
-      setTyped(fullText.slice(0, typed.length + 1));
-    }, delay);
-
-    return () => clearTimeout(timeout);
-  }, [typed]);
-
-  return (
-    <div className="text-center md:text-left max-w-3xl mx-auto mt-16 md:mt-24 mb-8 px-2">
-      <h1
-        className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight mb-5 bg-gradient-to-br from-foreground via-foreground/90 to-foreground/50 bg-clip-text text-transparent"
-        style={{ minHeight: "1.2em" }}
-      >
-        {typed}
-        <span
-          className="inline-block w-[2px] h-[0.85em] ml-1 align-middle rounded-full bg-foreground/60 animate-cursor-blink"
-          aria-hidden
-        />
-      </h1>
-      <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-        Documenting my path from Pitt CS grad to SWE — powered by late-night playlists and Python scripts
-      </p>
-    </div>
-  );
-};
+const Intro = () => (
+  <div className="text-center md:text-left max-w-3xl mx-auto mt-16 md:mt-24 mb-8 px-2">
+    <h1
+      className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight mb-5 text-foreground"
+      style={{ minHeight: "1.2em" }}
+    >
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          className="inline-block mr-[0.3em]"
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{
+            delay: i * STAGGER,
+            duration: DURATION,
+            ease: EASE,
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+      <motion.span
+        className="inline-block w-[2px] h-[0.85em] ml-0.5 align-middle rounded-full bg-foreground/60 animate-cursor-blink"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: cursorDelay, duration: 0.4 }}
+        aria-hidden
+      />
+    </h1>
+    <motion.p
+      className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed"
+      initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{
+        delay: subtitleDelay,
+        duration: 0.6,
+        ease: EASE,
+      }}
+    >
+      Documenting my path from Pitt CS grad to SWE — powered by late-night playlists and Python scripts
+    </motion.p>
+  </div>
+);
 
 export default Intro;
