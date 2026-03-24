@@ -27,7 +27,7 @@ const Projects: React.FC<ProjectsProps> = ({ projects, dragging }) => (
       {projects.map((project, index) => (
         <li
           key={index}
-          className="transition-transform duration-200 hover:scale-105 bg-card border border-border rounded-xl p-4 text-left relative"
+          className="transition-shadow duration-200 hover:shadow-md bg-card border border-border rounded-xl p-4 text-left relative"
         >
           <HoverCard openDelay={100} closeDelay={100}>
             <HoverCardTrigger asChild>

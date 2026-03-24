@@ -22,7 +22,7 @@ const Timeline: React.FC<TimelineProps> = ({ items, dragging }) => (
       {items.map((item, index) => (
         <StaggerItem key={index}>
         <li
-          className="relative pl-8 pb-8 last:pb-0 transition-transform duration-200 hover:scale-105"
+          className="relative pl-8 pb-8 last:pb-0"
         >
           <span
             className={`absolute -left-[0.4rem] top-1 w-3 h-3 rounded-full ${item.color}`}

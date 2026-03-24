@@ -7,7 +7,7 @@ const skills = [
 const MainHighlight = () => (
   <section className="w-full max-w-3xl mx-auto mt-6 animate-fade-in flex flex-col gap-4">
     {/* Photo + Current Focus card */}
-    <div className="relative rounded-lg overflow-hidden bg-card border border-border flex flex-col md:flex-row items-center">
+    <div className="relative rounded-lg overflow-hidden bg-white/70 dark:bg-white/[0.04] backdrop-blur-md border border-black/[0.06] dark:border-white/[0.08] shadow-sm flex flex-col md:flex-row items-center">
       <img
         src="/img/img4.jpeg"
         alt="Current Focus"
@@ -18,7 +18,7 @@ const MainHighlight = () => (
         <p className="text-sm text-muted-foreground mb-2">
           Diving into automation as well as AI to construct intelligent and efficient workflows that power real world results.
         </p>
-        <a href="/resume/Ashu_Sangar_Resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-block mt-auto px-4 py-2 rounded bg-primary/80 text-primary-foreground font-semibold transition hover:bg-primary text-sm">View CV</a>
+        <a href="/resume/Ashu_Sangar_Resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-block mt-auto px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors duration-150 text-sm">View CV</a>
       </div>
     </div>
 
@@ -28,7 +28,7 @@ const MainHighlight = () => (
         {[...skills, ...skills].map((skill, i) => (
           <span
             key={i}
-            className="px-3 py-1 rounded-full text-xs font-medium border border-border text-muted-foreground whitespace-nowrap"
+            className="px-3 py-1 rounded-full text-xs font-medium border border-border bg-muted text-muted-foreground whitespace-nowrap"
           >
             {skill}
           </span>

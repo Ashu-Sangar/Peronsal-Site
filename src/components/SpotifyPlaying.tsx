@@ -3,7 +3,6 @@ import { useSpotify } from '../hooks/useSpotify';
 import { Spotify } from 'react-spotify-embed';
 import FadeIn from '../utils/FadeIn';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../context/ThemeContext';
 import { AlertCircle } from 'lucide-react';
 
 type TrackListType = 'recent' | 'top';
@@ -21,7 +20,6 @@ const SpotifyPlaying = () => {
   const [activeList, setActiveList] = useState<TrackListType>('recent');
   const [displayTrack, setDisplayTrack] = useState<any>(null);
   const [tracksList, setTracksList] = useState<any[]>([]);
-  const { theme } = useTheme();
   const tracksRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -95,10 +93,10 @@ const SpotifyPlaying = () => {
 
   const renderLoadingState = () => (
     <div className="animate-pulse space-y-4">
-      <div className="h-[352px] bg-gray-800 rounded-lg"></div>
+      <div className="h-[352px] bg-muted rounded-lg"></div>
       <div className="space-y-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-[80px] bg-gray-800 rounded-lg"></div>
+          <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
         ))}
       </div>
     </div>
@@ -117,7 +115,7 @@ const SpotifyPlaying = () => {
             {'Currently Playing'}
           </h2>
           {/* Tab buttons */}
-          <div className="relative flex bg-gray-800 rounded-full p-1 gap-1 shadow-inner min-w-[260px]">
+          <div className="relative flex bg-muted rounded-full p-1 gap-1 shadow-inner min-w-[260px]">
             <button
               onClick={() => handleTabClick('recent')}
               className={`relative px-5 py-1.5 text-sm font-semibold rounded-full transition-all duration-200 flex items-center justify-center overflow-hidden`}
@@ -126,11 +124,11 @@ const SpotifyPlaying = () => {
               {activeList === 'recent' && (
                 <motion.div
                   layoutId="spotify-toggle-pill"
-                  className="absolute inset-0 bg-gray-900 shadow rounded-full z-0"
+                  className="absolute inset-0 bg-background shadow rounded-full z-0"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 ${activeList === 'recent' ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>Recently Played</span>
+              <span className={`relative z-10 ${activeList === 'recent' ? 'text-foreground' : 'text-muted-foreground'}`}>Recently Played</span>
             </button>
             <button
               onClick={() => handleTabClick('top')}
@@ -140,11 +138,11 @@ const SpotifyPlaying = () => {
               {activeList === 'top' && (
                 <motion.div
                   layoutId="spotify-toggle-pill"
-                  className="absolute inset-0 bg-gray-900 shadow rounded-full z-0"
+                  className="absolute inset-0 bg-background shadow rounded-full z-0"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-              <span className={`relative z-10 ${activeList === 'top' ? 'text-white' : 'text-gray-300 group-hover:text-white'}`}>Top Tracks</span>
+              <span className={`relative z-10 ${activeList === 'top' ? 'text-foreground' : 'text-muted-foreground'}`}>Top Tracks</span>
             </button>
           </div>
         </div>
@@ -185,29 +183,21 @@ const SpotifyPlaying = () => {
                     <div className="flex space-x-2">
                       <button
                         onClick={() => handleTabClick('recent')}
-                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 ${
                           activeList === 'recent'
-                            ? 'text-gray-900 dark:text-white font-medium'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                            ? 'bg-muted text-foreground font-medium'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
-                        style={{ 
-                          backgroundColor: activeList === 'recent' ? (theme === 'dark' ? '#374151' : '#e5e7eb') : 'transparent',
-                          transition: 'background-color 0.2s ease-in-out'
-                        }}
                       >
                         Recently Played
                       </button>
                       <button
                         onClick={() => handleTabClick('top')}
-                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors duration-200 ${
                           activeList === 'top'
-                            ? 'text-gray-900 dark:text-white font-medium'
-                            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                            ? 'bg-muted text-foreground font-medium'
+                            : 'text-muted-foreground hover:text-foreground'
                         }`}
-                        style={{ 
-                          backgroundColor: activeList === 'top' ? (theme === 'dark' ? '#374151' : '#e5e7eb') : 'transparent',
-                          transition: 'background-color 0.2s ease-in-out'
-                        }}
                       >
                         Top Tracks
                       </button>
@@ -224,7 +214,7 @@ const SpotifyPlaying = () => {
           {(isLoading.recent || isLoading.top) ? (
             <div className="animate-pulse space-y-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-[80px] bg-gray-800 rounded-lg"></div>
+                <div key={i} className="h-[80px] bg-muted rounded-lg"></div>
               ))}
             </div>
           ) : (

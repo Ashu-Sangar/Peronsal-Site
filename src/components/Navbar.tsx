@@ -12,7 +12,7 @@ const Navbar = () => {
       <img
         src="/img/icon.png"
         alt="Home"
-          className="w-16 h-16 object-cover border-2 border-foreground shadow"
+          className="w-16 h-16 object-cover rounded-full border-2 border-foreground shadow"
       />
     </a>
     {/* Right side: navigation */}
@@ -22,7 +22,7 @@ const Navbar = () => {
           to="/"
           end
           className={({ isActive }) =>
-              `hover:text-foreground transition font-medium px-2 py-1 rounded ${
+              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
                 isActive ? "text-foreground bg-muted" : ""
             }`
           }
@@ -34,7 +34,7 @@ const Navbar = () => {
         <NavLink
           to="/about"
           className={({ isActive }) =>
-              `hover:text-foreground transition font-medium px-2 py-1 rounded ${
+              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
                 isActive ? "text-foreground bg-muted" : ""
             }`
           }
@@ -46,7 +46,7 @@ const Navbar = () => {
         <NavLink
           to="/projects"
           className={({ isActive }) =>
-              `hover:text-foreground transition font-medium px-2 py-1 rounded ${
+              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
                 isActive ? "text-foreground bg-muted" : ""
             }`
           }
@@ -58,7 +58,7 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={({ isActive }) =>
-              `hover:text-foreground transition font-medium px-2 py-1 rounded ${
+              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
                 isActive ? "text-foreground bg-muted" : ""
             }`
           }

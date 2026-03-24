@@ -11,12 +11,11 @@ const Intro = () => {
     if (typed.length < fullText.length) {
       timeout = setTimeout(() => {
         setTyped(fullText.slice(0, typed.length + 1));
-      }, 80); // Speed of typing (ms)
+      }, 80);
     }
     return () => clearTimeout(timeout);
   }, [typed]);
 
-  // Blinking cursor effect
   useEffect(() => {
     const cursorInterval = setInterval(() => {
       setShowCursor((prev) => !prev);
@@ -25,11 +24,14 @@ const Intro = () => {
   }, []);
 
   return (
-    <div className="text-center md:text-left max-w-3xl mx-auto mt-6 mb-2 px-2">
-      <h1 className="text-2xl md:text-3xl font-extrabold mb-2 text-foreground animate-fade-in" style={{ minHeight: 40 }}>
+    <div className="text-center md:text-left max-w-3xl mx-auto mt-16 md:mt-24 mb-8 px-2">
+      <h1
+        className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight mb-5 bg-gradient-to-br from-foreground via-foreground/90 to-foreground/50 bg-clip-text text-transparent"
+        style={{ minHeight: "1.2em" }}
+      >
         {typed}
         <span
-          className={`inline-block w-2 ml-1 align-baseline transition-opacity duration-200 ${
+          className={`inline-block w-0.5 ml-1 align-baseline transition-opacity duration-200 text-foreground/60 ${
             showCursor ? "opacity-100" : "opacity-0"
           }`}
           aria-hidden
@@ -37,8 +39,8 @@ const Intro = () => {
           |
         </span>
       </h1>
-      <p className="text-base md:text-lg text-muted-foreground max-w-2xl animate-fade-in">
-      Documenting my path from Pitt CS grad to SWE — powered by late-night playlists and Python scripts
+      <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+        Documenting my path from Pitt CS grad to SWE — powered by late-night playlists and Python scripts
       </p>
     </div>
   );

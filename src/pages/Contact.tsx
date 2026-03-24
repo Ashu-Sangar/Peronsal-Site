@@ -67,11 +67,13 @@ export default function Contact() {
   const [showCalendar, setShowCalendar] = useState<null | '15' | '30' | '45'>(null);
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground flex flex-col transition-colors duration-300">
+    <div className="min-h-screen w-full bg-background text-foreground flex flex-col transition-colors duration-300 relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute top-[-8%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-indigo-500/[0.07] dark:bg-indigo-500/[0.11] blur-[130px]" />
       <Navbar />
       <main className="flex-1 flex flex-col items-center pt-16 pb-12">
         <div className="w-full max-w-4xl mx-auto flex flex-col items-center px-4">
-          <h1 className="text-3xl font-bold text-foreground text-center">Contact</h1>
+          <h1 className="text-3xl md:text-4xl font-light tracking-tight text-foreground text-center">Contact</h1>
           <p className="text-muted-foreground text-center text-lg mt-2 mb-8">Let's connect.</p>
           <p className="mb-7 text-muted-foreground text-center text-base">
             Connect with me through any of these platforms.
