@@ -59,9 +59,14 @@ export default {
 					'0%': { transform: 'translateX(0%)' },
 					'100%': { transform: 'translateX(-50%)' },
 				},
+				'cursor-blink': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0' },
+				},
 			},
 			animation: {
 				marquee: 'marquee 20s linear infinite',
+				'cursor-blink': 'cursor-blink 1s ease-in-out infinite',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
