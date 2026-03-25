@@ -22,7 +22,7 @@ const MainHighlight = () => (
           href="/resume/Ashu_Sangar_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block self-start px-4 py-2 rounded-lg bg-foreground text-background font-semibold transition-opacity duration-150 text-sm hover:opacity-80 cursor-pointer"
+          className="inline-block mt-auto px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white font-semibold transition-colors duration-150 text-sm"
         >
           View CV
         </a>
