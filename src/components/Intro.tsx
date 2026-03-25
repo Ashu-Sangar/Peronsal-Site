@@ -8,7 +8,7 @@ const cursorDelay = (words.length - 1) * STAGGER + DURATION;
 const subtitleDelay = cursorDelay + 0.15;
 
 const Intro = () => (
-  <div className="text-center md:text-left max-w-3xl mx-auto mt-16 md:mt-24 mb-8 px-2">
+  <div className="text-center md:text-left max-w-3xl mx-auto mt-12 md:mt-16 mb-8 px-2">
     <h1
       className="text-3xl sm:text-4xl md:text-5xl font-light tracking-tight mb-5 text-foreground"
       style={{ minHeight: "1.2em" }}

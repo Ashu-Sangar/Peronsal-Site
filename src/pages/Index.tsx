@@ -12,7 +12,7 @@ const Index = () => {
       <div className="pointer-events-none absolute top-[-8%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-indigo-500/[0.07] dark:bg-indigo-500/[0.11] blur-[130px]" />
       <Navbar />
       <main className="flex-1 flex flex-col items-center">
-        <div className="w-full max-w-2xl mx-auto px-4">
+        <div className="w-full max-w-3xl mx-auto px-4">
           <Intro />
           <ScrollReveal delay={0.1}>
             <MainHighlight />

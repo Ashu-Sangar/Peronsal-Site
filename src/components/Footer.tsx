@@ -32,8 +32,8 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer className="w-full max-w-5xl mx-auto text-center mt-20 mb-6 px-3 flex flex-col items-center gap-3">
-      <div className="flex justify-center gap-4 mb-2">
+    <footer className="w-full max-w-5xl mx-auto text-center mt-14 mb-6 px-3 flex flex-col items-center gap-3">
+      <div className="flex justify-center gap-5">
         {socialLinks.map(({ href, label, icon, target }) => (
           <a
             key={label}
@@ -41,7 +41,7 @@ const Footer = () => {
             aria-label={label}
             target={target ?? "_blank"}
             rel="noopener noreferrer"
-            className="text-foreground/70 hover:text-foreground transition-all duration-150 hover:scale-110 cursor-pointer"
+            className="text-foreground/50 hover:text-foreground transition-colors duration-200 cursor-pointer"
           >
             {icon}
           </a>

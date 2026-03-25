@@ -66,21 +66,20 @@ export default function About() {
           {/* Photos Row */}
           <div className="flex gap-5 justify-center mb-12 flex-wrap">
             {photos.map((p, i) => (
-              <ScrollReveal key={i} delay={i * 0.1}>
-                <div
-                  className={`hover-scale`}
-                  style={{
-                    transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
-                  }}
-                >
-                  <PhotoFlipCard
-                    frontSrc={p.src}
-                    alt={p.alt}
-                    backText={p.backText}
-                    setIsDragging={setIsDraggingPhoto}
-                  />
-                </div>
-              </ScrollReveal>
+              <div
+                key={i}
+                className={`hover-scale`}
+                style={{
+                  transform: `rotateZ(${i === 0 ? -9 : i === 1 ? -3 : i === 2 ? 3 : 7}deg)`,
+                }}
+              >
+                <PhotoFlipCard
+                  frontSrc={p.src}
+                  alt={p.alt}
+                  backText={p.backText}
+                  setIsDragging={setIsDraggingPhoto}
+                />
+              </div>
             ))}
           </div>
         </section>

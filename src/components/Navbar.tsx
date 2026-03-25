@@ -6,83 +6,55 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-  <nav className="w-full max-w-5xl mx-auto px-3 py-5 flex items-center justify-between">
-    {/* Left side: logo or site title */}
-    <a href="/" className="block">
-      <img
-        src="/img/icon.png"
-        alt="Home"
-          className="w-16 h-16 object-cover rounded-full border-2 border-foreground shadow"
-      />
-    </a>
-    {/* Right side: navigation */}
-      <ul className="flex gap-6 text-foreground/80 font-medium text-sm items-center">
-      <li>
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }) =>
-              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
-                isActive ? "text-foreground bg-muted" : ""
-            }`
-          }
-        >
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
-                isActive ? "text-foreground bg-muted" : ""
-            }`
-          }
-        >
-          About
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/projects"
-          className={({ isActive }) =>
-              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
-                isActive ? "text-foreground bg-muted" : ""
-            }`
-          }
-        >
-          Projects
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/contact"
-          className={({ isActive }) =>
-              `hover:text-foreground transition-colors duration-150 font-medium px-2 py-1 rounded ${
-                isActive ? "text-foreground bg-muted" : ""
-            }`
-          }
-        >
-          Contact
-        </NavLink>
-      </li>
-        {/* Theme toggle button */}
-        <li>
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-muted transition-colors duration-200"
-            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-5 h-5 text-foreground/80 hover:text-foreground transition-colors" />
-            ) : (
-              <Moon className="w-5 h-5 text-foreground/80 hover:text-foreground transition-colors" />
-            )}
-          </button>
-        </li>
-    </ul>
-  </nav>
-);
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background/80 border-b border-black/[0.04] dark:border-white/[0.06]">
+      <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+        {/* Left side: logo */}
+        <a href="/" className="block shrink-0">
+          <img
+            src="/img/icon.png"
+            alt="Home"
+            className="w-12 h-12 object-cover rounded-full border-2 border-foreground/20 shadow-sm"
+          />
+        </a>
+        {/* Right side: navigation */}
+        <ul className="flex gap-1 text-foreground/80 font-medium text-sm items-center">
+          {[
+            { to: "/", label: "Home", end: true },
+            { to: "/about", label: "About" },
+            { to: "/projects", label: "Projects" },
+            { to: "/contact", label: "Contact" },
+          ].map(({ to, label, end }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                end={end}
+                className={({ isActive }) =>
+                  `hover:text-foreground transition-colors duration-150 font-medium px-3 py-1.5 rounded-lg ${
+                    isActive ? "text-foreground bg-muted" : ""
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            </li>
+          ))}
+          <li className="ml-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-muted transition-colors duration-200 cursor-pointer"
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-5 h-5 text-foreground/80" />
+              ) : (
+                <Moon className="w-5 h-5 text-foreground/80" />
+              )}
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

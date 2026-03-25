@@ -46,6 +46,8 @@ const PhotoFlipCard: React.FC<PhotoFlipCardProps> = ({ frontSrc, alt, backText, 
             alt={alt}
             className="object-cover w-full h-full"
             draggable={false}
+            loading="eager"
+            fetchPriority="high"
           />
         </div>
         {/* Back */}
