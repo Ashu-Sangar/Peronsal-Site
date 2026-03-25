@@ -6,7 +6,7 @@ const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background/80 border-b border-black/[0.04] dark:border-white/[0.06]">
+    <nav className="sticky top-0 z-50 w-full">
       <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
         {/* Left side: logo */}
         <a href="/" className="block shrink-0">
@@ -29,8 +29,8 @@ const Navbar = () => {
                 to={to}
                 end={end}
                 className={({ isActive }) =>
-                  `hover:text-foreground transition-colors duration-150 font-medium px-3 py-1.5 rounded-lg ${
-                    isActive ? "text-foreground bg-muted" : ""
+                  `hover:text-foreground transition-colors duration-150 font-medium px-3 py-1.5 rounded-md ${
+                    isActive ? "text-foreground border border-foreground/20" : ""
                   }`
                 }
               >
