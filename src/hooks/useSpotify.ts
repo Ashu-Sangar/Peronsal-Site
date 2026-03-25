@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useSpotifyAuth } from './useSpotifyAuth';
 
@@ -59,19 +59,21 @@ export function useSpotify() {
 
   const { token } = useSpotifyAuth();
 
-  // Cache management
-  const [cache, setCache] = useState<{
+  // Use ref for cache so callbacks stay stable (no dependency cycle)
+  const cacheRef = useRef<{
     recent: { data: Track[]; timestamp: number } | null;
     top: { data: Track[]; timestamp: number } | null;
-  }>({
-    recent: null,
-    top: null,
-  });
+  }>({ recent: null, top: null });
 
-  const fetchCurrentTrack = useCallback(async () => {
+  // Guard to prevent duplicate initial fetches
+  const hasFetchedRef = useRef(false);
+
+  const fetchCurrentTrack = useCallback(async (showLoading = true) => {
     if (!token) return;
 
-    setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, current: true }, error: { ...prev.error, current: null } }));
+    if (showLoading) {
+      setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, current: true }, error: { ...prev.error, current: null } }));
+    }
 
     try {
       const response = await axios.get('https://api.spotify.com/v1/me/player/currently-playing', {
@@ -104,7 +106,7 @@ export function useSpotify() {
       const errorMessage = error.response?.status === 429
         ? 'Rate limited by Spotify API. Please wait before retrying.'
         : 'Error fetching current track';
-      
+
       setState(prev => ({
         ...prev,
         currentTrack: null,
@@ -114,16 +116,19 @@ export function useSpotify() {
     }
   }, [token]);
 
-  const fetchRecentTracks = useCallback(async (force = false) => {
+  const fetchRecentTracks = useCallback(async (force = false, showLoading = true) => {
     if (!token) return;
 
-    // Check cache first
-    if (!force && cache.recent && Date.now() - cache.recent.timestamp < CACHE_DURATION) {
-      setState(prev => ({ ...prev, recentTracks: cache.recent!.data }));
+    // Check cache first (read from ref, no dependency)
+    const cached = cacheRef.current.recent;
+    if (!force && cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      setState(prev => ({ ...prev, recentTracks: cached.data }));
       return;
     }
 
-    setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, recent: true }, error: { ...prev.error, recent: null } }));
+    if (showLoading) {
+      setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, recent: true }, error: { ...prev.error, recent: null } }));
+    }
 
     try {
       const response = await axios.get('https://api.spotify.com/v1/me/player/recently-played?limit=10', {
@@ -142,7 +147,7 @@ export function useSpotify() {
           spotifyUrl: item.track.external_urls.spotify,
         }));
 
-        setCache(prev => ({ ...prev, recent: { data: tracks, timestamp: Date.now() } }));
+        cacheRef.current = { ...cacheRef.current, recent: { data: tracks, timestamp: Date.now() } };
         setState(prev => ({
           ...prev,
           recentTracks: tracks,
@@ -153,25 +158,28 @@ export function useSpotify() {
       const errorMessage = error.response?.status === 429
         ? 'Rate limited by Spotify API. Please wait before retrying.'
         : 'Error fetching recent tracks';
-      
+
       setState(prev => ({
         ...prev,
         isLoading: { ...prev.isLoading, recent: false },
         error: { ...prev.error, recent: errorMessage }
       }));
     }
-  }, [token, cache]);
+  }, [token]);
 
-  const fetchTopTracks = useCallback(async (force = false) => {
+  const fetchTopTracks = useCallback(async (force = false, showLoading = true) => {
     if (!token) return;
 
-    // Check cache first
-    if (!force && cache.top && Date.now() - cache.top.timestamp < CACHE_DURATION) {
-      setState(prev => ({ ...prev, topTracks: cache.top!.data }));
+    // Check cache first (read from ref, no dependency)
+    const cached = cacheRef.current.top;
+    if (!force && cached && Date.now() - cached.timestamp < CACHE_DURATION) {
+      setState(prev => ({ ...prev, topTracks: cached.data }));
       return;
     }
 
-    setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, top: true }, error: { ...prev.error, top: null } }));
+    if (showLoading) {
+      setState(prev => ({ ...prev, isLoading: { ...prev.isLoading, top: true }, error: { ...prev.error, top: null } }));
+    }
 
     try {
       const response = await axios.get(
@@ -193,7 +201,7 @@ export function useSpotify() {
           spotifyUrl: item.external_urls.spotify,
         }));
 
-        setCache(prev => ({ ...prev, top: { data: tracks, timestamp: Date.now() } }));
+        cacheRef.current = { ...cacheRef.current, top: { data: tracks, timestamp: Date.now() } };
         setState(prev => ({
           ...prev,
           topTracks: tracks,
@@ -204,46 +212,55 @@ export function useSpotify() {
       const errorMessage = error.response?.status === 429
         ? 'Rate limited by Spotify API. Please wait before retrying.'
         : 'Error fetching top tracks';
-      
+
       setState(prev => ({
         ...prev,
         isLoading: { ...prev.isLoading, top: false },
         error: { ...prev.error, top: errorMessage }
       }));
     }
-  }, [token, cache]);
+  }, [token]);
 
-  // Initial fetch
+  // Initial fetch — runs once per token
   useEffect(() => {
-    if (token) {
+    if (token && !hasFetchedRef.current) {
+      hasFetchedRef.current = true;
       fetchCurrentTrack();
       fetchRecentTracks();
       fetchTopTracks();
     }
   }, [token, fetchCurrentTrack, fetchRecentTracks, fetchTopTracks]);
 
-  // Polling for current track
+  // Reset fetch guard when token changes (e.g. refresh)
+  useEffect(() => {
+    hasFetchedRef.current = false;
+  }, [token]);
+
+  // Polling for current track — no loading indicator on polls
   useEffect(() => {
     if (!token) return;
 
-    const pollInterval = setInterval(fetchCurrentTrack, POLLING_INTERVAL);
+    const pollInterval = setInterval(() => fetchCurrentTrack(false), POLLING_INTERVAL);
     return () => clearInterval(pollInterval);
   }, [token, fetchCurrentTrack]);
 
-  // Cache invalidation
+  // Cache invalidation — stable interval, no loading indicator on background refetches
   useEffect(() => {
+    if (!token) return;
+
     const cacheCheckInterval = setInterval(() => {
       const now = Date.now();
+      const cache = cacheRef.current;
       if (cache.recent && now - cache.recent.timestamp >= CACHE_DURATION) {
-        fetchRecentTracks(true);
+        fetchRecentTracks(true, false);
       }
       if (cache.top && now - cache.top.timestamp >= CACHE_DURATION) {
-        fetchTopTracks(true);
+        fetchTopTracks(true, false);
       }
     }, CACHE_DURATION);
 
     return () => clearInterval(cacheCheckInterval);
-  }, [cache, fetchRecentTracks, fetchTopTracks]);
+  }, [token, fetchRecentTracks, fetchTopTracks]);
 
   return {
     ...state,
@@ -253,4 +270,4 @@ export function useSpotify() {
       top: () => fetchTopTracks(true),
     }
   };
-} 
+}

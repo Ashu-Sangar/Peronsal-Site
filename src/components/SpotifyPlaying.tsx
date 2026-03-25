@@ -6,12 +6,48 @@ import { AlertCircle } from 'lucide-react';
 
 type TrackListType = 'recent' | 'top';
 
-// Memoize Spotify iframes — only re-render when the link actually changes
-const StableEmbed = memo(
-  ({ link, wide, className }: { link: string; wide?: boolean; className?: string }) => (
-    <Spotify wide={wide} link={link} className={className} />
-  ),
-  (prev, next) => prev.link === next.link
+// Embed wrapper that shows a skeleton until the iframe loads, then fades in
+const LoadableEmbed = memo(
+  ({ link, wide, className }: { link: string; wide?: boolean; className?: string }) => {
+    const [loaded, setLoaded] = useState(false);
+    const prevLinkRef = useRef(link);
+
+    // Reset loaded state when the link changes (new track)
+    useEffect(() => {
+      if (prevLinkRef.current !== link) {
+        setLoaded(false);
+        prevLinkRef.current = link;
+      }
+    }, [link]);
+
+    const height = wide ? 80 : 352;
+
+    return (
+      <div className="relative rounded-xl overflow-hidden" style={{ height }}>
+        {/* Skeleton placeholder — fades out when iframe loads */}
+        <div
+          className={`absolute inset-0 bg-muted rounded-xl${loaded ? '' : ' animate-pulse'}`}
+          style={{
+            opacity: loaded ? 0 : 1,
+            transition: 'opacity 0.4s ease-out',
+            pointerEvents: 'none',
+          }}
+        />
+        {/* Actual Spotify iframe — fades in when loaded */}
+        <Spotify
+          wide={wide}
+          link={link}
+          className={className}
+          onLoad={() => setLoaded(true)}
+          style={{
+            opacity: loaded ? 1 : 0,
+            transition: 'opacity 0.4s ease-out',
+          }}
+        />
+      </div>
+    );
+  },
+  (prev, next) => prev.link === next.link && prev.wide === next.wide
 );
 
 const SpotifyPlaying = () => {
@@ -174,11 +210,11 @@ const SpotifyPlaying = () => {
 
             {displayTrack && (
               <>
-                <div className="rounded-xl overflow-hidden shadow-sm sm:hidden">
-                  <StableEmbed wide link={displayTrack.spotifyUrl} className="w-full" />
+                <div className="sm:hidden">
+                  <LoadableEmbed wide link={displayTrack.spotifyUrl} className="w-full" />
                 </div>
-                <div className="rounded-xl overflow-hidden shadow-sm hidden sm:block">
-                  <StableEmbed link={displayTrack.spotifyUrl} className="w-full" />
+                <div className="hidden sm:block">
+                  <LoadableEmbed link={displayTrack.spotifyUrl} className="w-full" />
                 </div>
 
                 {/* Mobile tab buttons */}
@@ -214,12 +250,12 @@ const SpotifyPlaying = () => {
             ) : (
               <div className="grid gap-3">
                 {tracksList.map((track, index) => (
-                  <div
+                  <LoadableEmbed
                     key={track.id || index}
-                    className="rounded-xl overflow-hidden shadow-sm"
-                  >
-                    <StableEmbed wide link={track.spotifyUrl} className="w-full" />
-                  </div>
+                    wide
+                    link={track.spotifyUrl}
+                    className="w-full"
+                  />
                 ))}
               </div>
             )}
