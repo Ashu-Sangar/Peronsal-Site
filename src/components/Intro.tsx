@@ -46,7 +46,7 @@ const Intro = () => (
         ease: EASE,
       }}
     >
-      Documenting my path from Pitt CS grad to SWE — powered by late-night playlists and Python scripts
+      Pitt CS grad → Georgia Tech MS — powered by late-night playlists and Python scripts
     </motion.p>
   </div>
 );

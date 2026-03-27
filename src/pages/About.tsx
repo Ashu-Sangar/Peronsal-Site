@@ -27,27 +27,45 @@ const photos = [
   }
 ];
 
-const timelineData = [
+const experienceData = [
   {
     company: 'Neuraville',
     role: 'Software Engineer',
     details: 'Developed real-time AI-human interface integrating FEAGI with Blender, achieving 99% performance optimization and 80% reduction in manual setup through automated Python scripts.',
     date: 'Jan 2025 - May 2025',
-    color: 'bg-red-400'
+    color: 'bg-red-400',
+    tint: 'bg-red-400/[0.04] dark:bg-red-400/[0.06]',
+    glow: 'hover:shadow-red-400/10',
   },
   {
     company: 'Outlier AI',
     role: 'Prompt Engineer',
     details: 'Developed 50+ AI prompts across multiple domains, improving response accuracy by 25% and model robustness by 30% through comprehensive stress-testing frameworks.',
     date: 'Apr 2024 - Dec 2024',
-    color: 'bg-yellow-300'
+    color: 'bg-yellow-300',
+    tint: 'bg-yellow-300/[0.05] dark:bg-yellow-300/[0.06]',
+    glow: 'hover:shadow-yellow-300/10',
+  },
+];
+
+const educationData = [
+  {
+    company: 'Georgia Institute of Technology',
+    role: 'M.S in Computer Science',
+    details: 'They say knowledge is power — so I\'m grinding for more XP',
+    date: 'Fall 2026',
+    color: 'bg-blue-400',
+    tint: 'bg-blue-400/[0.04] dark:bg-blue-400/[0.06]',
+    glow: 'hover:shadow-blue-400/10',
   },
   {
-    company: 'University Of Pittsburgh ',
+    company: 'University Of Pittsburgh',
     role: 'B.S in Computer Science',
     details: 'Where I learned that the shortest path isn\'t always the most efficient',
-    date: '2021-2025',
-    color: 'bg-green-400'
+    date: '2021 - 2025',
+    color: 'bg-green-400',
+    tint: 'bg-green-400/[0.04] dark:bg-green-400/[0.06]',
+    glow: 'hover:shadow-green-400/10',
   },
 ];
 
@@ -84,12 +102,15 @@ export default function About() {
           </div>
         </section>
 
-        {/* --- Timeline & Hobbies --- */}
-        <section className="w-full max-w-4xl mx-auto flex flex-col md:flex-row gap-8 md:gap-8 justify-center">
-          <ScrollReveal className="w-full md:w-1/2">
-            <Timeline items={timelineData} dragging={isDraggingPhoto} />
+        {/* --- Experience, Education & Interests --- */}
+        <section className="w-full max-w-5xl mx-auto px-2 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <ScrollReveal>
+            <Timeline title="Experience" items={experienceData} dragging={isDraggingPhoto} />
           </ScrollReveal>
-          <ScrollReveal delay={0.1} className="w-full md:w-1/2">
+          <ScrollReveal delay={0.1}>
+            <Timeline title="Education" items={educationData} dragging={isDraggingPhoto} />
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
             <Hobbies dragging={isDraggingPhoto} />
           </ScrollReveal>
         </section>
