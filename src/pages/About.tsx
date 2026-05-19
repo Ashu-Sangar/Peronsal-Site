@@ -29,6 +29,15 @@ const photos = [
 
 const experienceData = [
   {
+    company: 'Apple', 
+    role: 'Technical Specialist', 
+    details: 'Delivering expert technical support and troubleshooting across the Apple ecosystem, resolving complex software and hardware issues while optimizing device performance and user experience.', 
+    date: '2026 - Present', 
+    color: 'bg-orange-400', 
+    tint: 'bg-orange-400/[0.04] dark:bg-orange-400/[0.06]', 
+    glow: 'hover:shadow-orange-400/10', 
+  }, 
+  {
     company: 'Neuraville',
     role: 'Software Engineer',
     details: 'Developed real-time AI-human interface integrating FEAGI with Blender, achieving 99% performance optimization and 80% reduction in manual setup through automated Python scripts.',
